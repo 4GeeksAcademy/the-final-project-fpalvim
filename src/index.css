@@ -3,16 +3,18 @@
     background-color: #ffffff;
 }
 
+/* login page styles */
+
 .login-page-top {
     position: relative;
 }
 
-.image-container {
+.login-page-image-container {
     position: relative;
     width: 100%;
 }
 
-.image-container img {
+.login-page-image-container img {
     width: 100%;
     height: auto;
 }
@@ -26,7 +28,8 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 40%;
+    width: 30%;
+    opacity: .8;
 }
 
 .overlay-form label,
@@ -62,4 +65,38 @@
 
 .login-page-bottom img {
     width: 300px;
+}
+
+/* profile page styles */
+
+.profile-page-img-container {
+    position: relative;
+    width: 100%;
+}
+
+.profile-page-img-container {
+    width: 100%;
+    height: auto;
+}
+
+.profile-page-middle-images-container {
+    display: inline-block;
+    justify-content: space-between;
+    margin-right: 1rem;
+}
+
+.profile-page-middle-images-container img {
+    width: 300px;
+    margin-left: 2rem;
+}
+
+.profile-page-bottom-left-box,
+.profile-page-bottom-center-box {
+    background-color: #FAFAF5;
+}
+
+.profile-page-bottom-left-box p,
+.profile-page-bottom-center-box p {
+    background-color: #FAFAF5;
+    height: 200px;
 }

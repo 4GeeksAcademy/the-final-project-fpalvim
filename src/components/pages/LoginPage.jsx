@@ -5,7 +5,7 @@ function LoginPage() {
                 <h1>Site title</h1>
             </div>
             <div className="login-page-top row mb-5">
-                <img className="image-container" src="https://media.istockphoto.com/id/1199243596/es/foto/escenario-de-concierto-en-el-festival-de-rock-siluetas-de-instrumentos-musicales.jpg?s=2048x2048&w=is&k=20&c=0Fial9For-sXbtAyP04xydhn46_PeQqWLD6ge6o-A4w=" alt="">
+                <img className="login-page-image-container" src="https://media.istockphoto.com/id/1199243596/es/foto/escenario-de-concierto-en-el-festival-de-rock-siluetas-de-instrumentos-musicales.jpg?s=2048x2048&w=is&k=20&c=0Fial9For-sXbtAyP04xydhn46_PeQqWLD6ge6o-A4w=" alt="">
                 </img>
                 <form action="" className="overlay-form">
                     <label htmlFor="input-email-login">Email:</label>
