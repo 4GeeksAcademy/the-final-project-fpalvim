@@ -12,10 +12,10 @@ db = SQLAlchemy(app)
 
 class Band(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    email_address = db.Column(db.String(80), nullable = False)
-    username = db.Column(db.String(80), nullable = False)
-    password = db.Column(db.String(80), nullable = False)
-    is_active = db.Column(db.Boolean(), unique=False)
+    email_address = db.Column(db.String(255), nullable = False)
+    username = db.Column(db.String(255), nullable = False)
+    password = db.Column(db.String(255), nullable = False)
+    is_active = db.Column(db.String(255), unique=False)
     picture_id = db.Column(db.Integer)
     video_id = db.Column(db.Integer)
     description = db.Column(db.String(5000))
@@ -23,18 +23,18 @@ class Band(db.Model):
     address = db.Column(db.String(1000), nullable = False)
     phone_number = db.Column(db.String(80), nullable = False)
 
-class Venue(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    email_address = db.Column(db.String(80), nullable = False)
-    username = db.Column(db.String(80), nullable = False)
-    password = db.Column(db.String(80), nullable = False)
-    is_active = db.Column(db.Boolean(), unique=False)
-    picture_id = db.Column(db.Integer)
-    video_id = db.Column(db.Integer)
-    description = db.Column(db.String(5000))
-    tags = db.Column(db.String(80))
-    address = db.Column(db.String(1000), nullable = False)
-    phone_number = db.Column(db.String(80), nullable = False)
+# class Venue(db.Model):
+#     id = db.Column(db.Integer, primary_key = True)
+#     email_address = db.Column(db.String(80), nullable = False)
+#     username = db.Column(db.String(80), nullable = False)
+#     password = db.Column(db.String(80), nullable = False)
+#     is_active = db.Column(db.Boolean(), unique=False)
+#     picture_id = db.Column(db.Integer)
+#     video_id = db.Column(db.Integer)
+#     description = db.Column(db.String(5000))
+#     tags = db.Column(db.String(80))
+#     address = db.Column(db.String(1000), nullable = False)
+#     phone_number = db.Column(db.String(80), nullable = False)
 
 # class Availability(db.model):
 #     is_booked = db.Column(db.Boolean(), nullable=False)
@@ -57,7 +57,7 @@ with app.app_context():
 @app.route('/')
 @app.route('/home')
 def greeting():
-    print("test")
+    return jsonify("test")
 
 @app.route('/testpage')
 def test():
@@ -74,7 +74,9 @@ def create_band():
                     username=data['username'],
                     password=data['password'],
                     is_active=data['is_active'],
-                    picture_id=data['picture_id'])
+                    picture_id=data['picture_id'],
+                    phone_number=data['phone_number'],
+                    address=data['address'])
     db.session.add(new_band)
     db.session.commit()
     
