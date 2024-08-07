@@ -1,4 +1,4 @@
-import MyMapComponent from "./Maps";
+import MyMapComponent from "../common/Maps";
 
 function SearchPage() {
     return ( 

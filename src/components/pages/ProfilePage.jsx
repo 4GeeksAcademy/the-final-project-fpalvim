@@ -1,4 +1,10 @@
+import { useContext } from "react";
+import ShowCalendar from "../common/ShowCalendar";
+import { MyContext } from "../context/MyContext";
+
 function ProfilePage() {
+    const {calDate, setCalDate} = useContext(MyContext)
+
     return ( 
         <div className="profile-page-container">
             <div className="user-band-venue-title d-flex justify-content-start mt-5 mb-4 mx-3">
@@ -13,8 +19,8 @@ function ProfilePage() {
                     <img src="https://picsum.photos/200" alt="" />
                     <img src="https://picsum.photos/200" alt="" />
                 </div>
-                <div className="profile-page-middle-calendar col-2 border border-2 rounded-4">
-                    <p>calendar here</p>
+                <div className="profile-page-middle-calendar col-2">
+                    <ShowCalendar/>
                 </div>
             </div>
             <div className="soundtrack-icons mx-4 mt-2">

@@ -1,7 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
-const MyMapComponent = () => {
+const Maps = () => {
   const position = [51.505, -0.09]; // Default position
 
   return (
@@ -12,11 +13,11 @@ const MyMapComponent = () => {
       />
       <Marker position={position}>
         <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
+          <Link to= {`/profilepage`}><button>click to see more details</button></Link>
         </Popup>
       </Marker>
     </MapContainer>
   );
 };
 
-export default MyMapComponent;
+export default Maps;
