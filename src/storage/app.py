@@ -4,8 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///people.db'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://avnadmin:AVNS_LPQSoqkafyy8CM9p8cY@curima-curima-ed7c.i.aivencloud.com:23519/defaultdb?sslmode=require'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///people.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://avnadmin:AVNS_LLhpu0aHZ0pOlhg5G2r@final-project-felipe-d067.l.aivencloud.com:21737/defaultdb?sslmode=require'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)

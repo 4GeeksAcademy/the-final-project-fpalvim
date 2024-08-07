@@ -1,20 +1,29 @@
+import { Link } from "react-router-dom";
+
 function LoginPage() {
     return ( 
         <div className="login-page-container">
             <div className="application-title d-flex justify-content-center mt-5 mb-4">
                 <h1>Site title</h1>
             </div>
-            <div className="login-page-top row mb-5">
+            <div className="login-page-top mb-5">
                 <img className="login-page-image-container" src="https://media.istockphoto.com/id/1199243596/es/foto/escenario-de-concierto-en-el-festival-de-rock-siluetas-de-instrumentos-musicales.jpg?s=2048x2048&w=is&k=20&c=0Fial9For-sXbtAyP04xydhn46_PeQqWLD6ge6o-A4w=" alt="">
                 </img>
-                <form action="" className="overlay-form">
-                    <label htmlFor="input-email-login">Email:</label>
-                    <input id="input-email-login" type="email" placeholder="Email here"></input>
-                    <label htmlFor="input-password-login">Password:</label>
-                    <input id="input-password-login" type="password" placeholder="Password here"></input>
-                    <button>Login</button>
-                </form>
-
+                <div className="overlay-form">
+                    <form>
+                        <div className="mb-3">
+                            <label for="exampleInputEmail1" className="form-label">Email address</label>
+                            <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"></input>
+                            <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
+                        </div>
+                        <div className="mb-3">
+                            <label for="exampleInputPassword1" className="form-label">Password</label>
+                            <input type="password" className="form-control" id="exampleInputPassword1"></input>
+                        </div>
+                        <button type="submit" className="btn btn-primary">Submit</button>
+                    </form>
+                    <Link to= {`/profilepage`} className="login-page-create-account-link">Create an account</Link>
+                </div>
             </div>
             <div className="login-page-middle d-flex mb-1">
                 <div className="site-info-title p-5">

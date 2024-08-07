@@ -7,49 +7,32 @@
 
 .login-page-top {
     position: relative;
+    display: inline-block;
 }
 
-.login-page-image-container {
-    position: relative;
-    width: 100%;
+.login-page-top img {
+    display: block;
+    width: 100vw;
+    height: 80vh;
 }
-
-.login-page-image-container img {
-    width: 100%;
-    height: auto;
-}
-
+    
 .overlay-form {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 30%;
-    opacity: .8;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    opacity: .7; 
+    color: #fff; 
+    padding: 10px 20px; 
+    font-size: 15px; 
+    text-align: center;
+    border-radius: 5%;
 }
 
-.overlay-form label,
-.overlay-form button {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
-    background-color: #ebd1dd;
-    border-radius: 8px;
-}
-
-.overlay-form input {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
-    border-radius: 8px;
-}
-
-.overlay-form input {
-    padding-left: 1rem;
+.login-page-top-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .login-page-bottom-images-container {
