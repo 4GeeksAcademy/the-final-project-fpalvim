@@ -3,7 +3,6 @@ import ShowCalendar from "../common/ShowCalendar";
 import { MyContext } from "../context/MyContext";
 
 function ProfilePage() {
-    const {calDate, setCalDate} = useContext(MyContext)
 
     return ( 
         <div className="profile-page-container">

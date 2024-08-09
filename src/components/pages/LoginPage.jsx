@@ -20,7 +20,7 @@ function LoginPage() {
                             <label for="exampleInputPassword1" className="form-label">Password</label>
                             <input type="password" className="form-control" id="exampleInputPassword1"></input>
                         </div>
-                        <button type="submit" className="btn btn-primary">Submit</button>
+                        <button type="submit" className="btn btn-primary">Login</button>
                     </form>
                     <Link to= {`/profilepage`} className="login-page-create-account-link">Create an account</Link>
                 </div>
