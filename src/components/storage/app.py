@@ -21,6 +21,7 @@ class Band(db.Model):
     tags = db.Column(db.String(80))
     address = db.Column(db.String(1000), nullable = False)
     phone_number = db.Column(db.String(80), nullable = False)
+    is_available = db.relationship('Available', backref='band', lazy=True)
 
 class Venue(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -34,20 +35,19 @@ class Venue(db.Model):
     tags = db.Column(db.String(80))
     address = db.Column(db.String(1000), nullable = False)
     phone_number = db.Column(db.String(80), nullable = False)
+    is_available = db.relationship('Available', backref='venue', lazy=True)
 
-# class Availability(db.model):
-#     is_booked = db.Column(db.Boolean(), nullable=False)
-#     band_id = db.Column(db.Integer, db.ForeignKey('band.id'), nullable=False)
-#     band = db.relationship('Band')
-#     venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'), nullable=False)
-#     venue = db.relationship('Venue')
+class Available(db.model):
+    is_booked = db.Column(db.String(255), unique=False)
+    band_id = db.Column(db.Integer, db.ForeignKey('band.id'),nullable=False)
+    venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'),nullable=False)
 
-# class Media(db.model):
-#     id = db.Column(db.Integer, primary_key = True)
-#     band_id = db.Column(db.Integer, db.ForeignKey('band.id'), nullable=False)
-#     band = db.relationship('Band')
-#     venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'), nullable=False)
-#     venue = db.relationship('Venue')
+class Media(db.model):
+    id = db.Column(db.Integer, primary_key = True)
+    url = username = db.Column(db.String(255), nullable = False)
+    band_id = db.Column(db.Integer, db.ForeignKey('band.id'),nullable=False)
+    venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'),nullable=False)
+
 
 
 with app.app_context():
