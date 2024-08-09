@@ -1,8 +1,18 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import ShowCalendar from "../common/ShowCalendar";
 import { MyContext } from "../context/MyContext";
+import axios from "axios";
 
 function ProfilePage() {
+
+    useEffect(()=>{
+        const fetchData = async ()=>{
+            const response = await axios.get("https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/bands")
+            console.log(response.data);
+            
+        }
+        fetchData()
+    },[])
 
     return ( 
         <div className="profile-page-container">

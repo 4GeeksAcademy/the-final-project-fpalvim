@@ -1,9 +1,10 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const MyContext = createContext(null)
 
 export const MyProvider = ({ children }) => {
     const [calDate, setCalDate] = useState()
+
 
     return (
         <MyContext.Provider value={{calDate,setCalDate}}>

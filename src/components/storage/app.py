@@ -1,9 +1,10 @@
 import json
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://avnadmin:AVNS_LLhpu0aHZ0pOlhg5G2r@final-project-felipe-d067.l.aivencloud.com:21737/defaultdb?sslmode=require'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -21,7 +22,7 @@ class Band(db.Model):
     tags = db.Column(db.String(80))
     address = db.Column(db.String(1000), nullable = False)
     phone_number = db.Column(db.String(80), nullable = False)
-    is_available = db.relationship('Available', backref='band', lazy=True)
+    # is_available = db.relationship('Available', backref='band', lazy=True)
 
 class Venue(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -35,18 +36,18 @@ class Venue(db.Model):
     tags = db.Column(db.String(80))
     address = db.Column(db.String(1000), nullable = False)
     phone_number = db.Column(db.String(80), nullable = False)
-    is_available = db.relationship('Available', backref='venue', lazy=True)
+    # is_available = db.relationship('Available', backref='venue', lazy=True)
 
-class Available(db.model):
-    is_booked = db.Column(db.String(255), unique=False)
-    band_id = db.Column(db.Integer, db.ForeignKey('band.id'),nullable=False)
-    venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'),nullable=False)
+# class Available(db.model):
+#     is_booked = db.Column(db.String(255), unique=False)
+#     band_id = db.Column(db.Integer, db.ForeignKey('band.id'),nullable=False)
+#     venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'),nullable=False)
 
-class Media(db.model):
-    id = db.Column(db.Integer, primary_key = True)
-    url = username = db.Column(db.String(255), nullable = False)
-    band_id = db.Column(db.Integer, db.ForeignKey('band.id'),nullable=False)
-    venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'),nullable=False)
+# class Media(db.model):
+#     id = db.Column(db.Integer, primary_key = True)
+#     url = username = db.Column(db.String(255), nullable = False)
+#     band_id = db.Column(db.Integer, db.ForeignKey('band.id'),nullable=False)
+#     venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'),nullable=False)
 
 
 
@@ -100,6 +101,7 @@ def create_venue():
     return jsonify({"message":"Venue created", "data":data}), 201
 
 @app.route('/bands', methods=['GET'])
+
 def get_bands():
     band = Band.query.all()
     return jsonify([{
