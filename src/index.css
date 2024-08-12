@@ -54,13 +54,14 @@
 
 .profile-page-img-container {
     position: relative;
-    width: 100%;
+    width: 100vw;
+    height: 80vh;
 }
 
-.profile-page-img-container {
+/* .profile-page-img-container {
     width: 100%;
     height: auto;
-}
+} */
 
 .profile-page-middle-images-container {
     display: inline-block;

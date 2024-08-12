@@ -52,9 +52,9 @@ function LoginPage() {
                     <h1>Introducing GigLink</h1>
                 </div>
                 <div className="site-info-text p-5">
-                        <p>welcome to GigLink, <br></br><br></br>
+                    <p>welcome to GigLink, <br></br><br></br>
                         the ultimate online platform designed to bridge the gap between bands and venues effortlessly! With GigLink, musicians can create profiles to showcase their talents, while venues can list availability and unique features. Our intuitive calendar system allows both sides to easily browse available dates, ensuring that you find the perfect match for your next gig. Whether you’re a band looking to book your next performance or a venue seeking fresh sounds, simply connect, message, and send booking requests—all in one seamless experience. <br /> Join GigLink today and transform the way you book live music!
-                        </p>
+                    </p>
                         <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Join GigLink</button>
                     <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div className="modal-dialog">
@@ -98,14 +98,14 @@ function LoginPage() {
                                     </div>
                                     <div className="col-12">
                                         <div className="form-check">
-                                        <input className="form-check-input" type="checkbox" id="gridCheck"></input>
-                                        <label className="form-check-label" for="gridCheck">
-                                            Keep me logged in
-                                        </label>
+                                            <input className="form-check-input" type="checkbox" id="gridCheck"></input>
+                                            <label className="form-check-label" for="gridCheck">
+                                                Keep me logged in
+                                            </label>
                                         </div>
                                     </div>
                                     <div className="col-12">
-                                    <button  type="button" className="btn btn-primary" onClick={() => navigate('/loginpage')}>Create account</button>
+                                        <button  type="button" className="btn btn-primary" onClick={() => navigate('/loginpage')}>Create account</button>
                                     </div>
                                 </div>
                             </div>

@@ -11,11 +11,13 @@ function SearchPage() {
                 <p>maybe a dropdown calendar here to filter by date</p>
             </div>
             <div>
-                    <div className="search-page-filters p-3 d-flex justify-content-between">
-                        <select className="form-select w-45" name="" id=""></select>
-                        <select className="form-select w-45" name="" id=""></select>
-                    </div>
+                <div className="search-page-filters p-3 d-flex flex-column justify-content-between">
+                    <label for="by-distance" className="form-label">By distance</label>
+                        <select className="form-select w-45" name="" id="by-distance"></select>
+                    <label for="by-tags" className="form-label">By tags</label>
+                        <select className="form-select w-45" name="" id="by-tags"></select>
                 </div>
+            </div>
             <div className="search-page-middle-wrapper row p-3">
                 <div className="search-page-middle-left-side col-lg-6 col-md-6 col-sm-12 border border-2 mx-3 p-2">
                     <div>123</div>

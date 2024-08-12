@@ -1,28 +1,33 @@
 import { useContext, useEffect } from "react";
 import ShowCalendar from "../common/ShowCalendar";
 import { MyContext } from "../context/MyContext";
-import axios from "axios";
+import { useParams } from "react-router-dom";
 
 function ProfilePage() {
 
     const {bands, setBands} = useContext(MyContext)
-
-    useEffect(()=>{
-        const fetchData = async ()=>{
-            const response = await axios.get("https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/bands")
-            console.log(response.data);
-            setBands(response.data)
-        }
-        fetchData()
-    },[])
+    const { id } = useParams()
 
     return ( 
         <div className="profile-page-container">
             <div className="user-band-venue-title d-flex justify-content-start mt-5 mb-4 mx-3">
-                <h1>User - venue - band name</h1>
+                <div>
+                    {
+                        bands.map((band)=> band.id == id ? ( 
+                            <h1 key={band.id}>{band.username}</h1> ) : null
+                        )
+                    }
+                </div>
             </div>
             <div className="profile-page-top">
-                <img className="profile-page-img-container mb-4" src="https://cdn.hobbyconsolas.com/sites/navi.axelspringer.es/public/media/image/2013/07/237499-metallica-cines-11-octubre.jpg?tf=1200x" alt="" />
+                <div className="profile-page-top">
+                    {
+                        bands.map((band)=> band.id == id ? (
+                            <img key={band.id} className="profile-page-img-container mb-4" src={band.profile_picture} alt=""></img>
+                        ) : null)
+                    }
+                </div>
+                {/* <img className="profile-page-img-container mb-4" src="https://cdn.hobbyconsolas.com/sites/navi.axelspringer.es/public/media/image/2013/07/237499-metallica-cines-11-octubre.jpg?tf=1200x" alt="" /> */}
             </div>
             <div div className="profile-page-middle d-flex flex-wrap row">
                 <div className="profile-page-middle-images-container col-lg-9 col-md-8 col-sm-12">
