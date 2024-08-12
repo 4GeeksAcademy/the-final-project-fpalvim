@@ -1,39 +1,76 @@
-* {
+/* {
     color: black;
     background-color: #ffffff;
-}
+}*/
 
 /* login page styles */
 
+
+/*.login-page-image-container {
+    position: relative;
+    width: 100%;
+}*/
 .login-page-top {
     position: relative;
-    display: inline-block;
 }
-
-.login-page-top img {
-    display: block;
+.bg-picture{
+    background-image: url(https://images.pexels.com/photos/1587927/pexels-photo-1587927.jpeg?auto%3Dcompress%26cs%3Dtinysrgb%26w%3D600);
     width: 100vw;
-    height: 80vh;
+    height: 50vw;
 }
-    
-.overlay-form {
-    position: absolute;
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-50%, -50%); 
-    opacity: .7; 
-    color: #fff; 
-    padding: 10px 20px; 
-    font-size: 15px; 
-    text-align: center;
-    border-radius: 5%;
+.login-form {
+    width: 20%;
+    margin-top: 23%;
+}
+#carouselExample{
+    width: 70%;
+}
+.login-page-bottom-images-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
 }
 
-.login-page-top-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.login-page-bottom-right-first-box,
+.login-page-bottom-right-second-box {
+    background-color: #FAFAF5;
 }
+
+.login-page-bottom img {
+    width: 300px;
+}
+/*.overlay-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 30%;
+    opacity: .8;
+}
+
+.overlay-form label,
+.overlay-form button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    background-color: #ebd1dd;
+    border-radius: 8px;
+}
+
+.overlay-form input {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+.overlay-form input {
+    padding-left: 1rem;
+}*/
 
 .login-page-bottom-images-container {
     display: flex;
@@ -54,14 +91,13 @@
 
 .profile-page-img-container {
     position: relative;
-    width: 100vw;
-    height: 80vh;
+    width: 100%;
 }
 
-/* .profile-page-img-container {
+.profile-page-img-container {
     width: 100%;
     height: auto;
-} */
+}
 
 .profile-page-middle-images-container {
     display: inline-block;
@@ -84,3 +120,6 @@
     background-color: #FAFAF5;
     height: 200px;
 }
+.fade.modal-backdrop.show{
+    opacity: 0.8;
+   }

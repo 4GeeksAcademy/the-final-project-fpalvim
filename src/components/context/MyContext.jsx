@@ -9,7 +9,7 @@ export const MyProvider = ({ children }) => {
 
     useEffect(()=>{
         const fetchData = async ()=>{
-            const response = await axios.get("https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/bands")
+            const response = await axios.get("https://didactic-umbrella-g4x5xgj7xww4hv9q-8787.app.github.dev/bands")
             console.log(response.data);
             setBands(response.data)
         }
