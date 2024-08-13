@@ -1,7 +1,13 @@
+import { useContext } from "react";
 import {Link} from "react-router-dom"
+import { MyContext } from "../context/MyContext";
 
 function Navbar() {
+
+    const {bands} = useContext(MyContext)
+
     return ( 
+        
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid">
                 <Link to="#" className="navbar-brand"><i className="bi bi-music-note-beamed fs-2"></i></Link>

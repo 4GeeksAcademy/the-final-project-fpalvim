@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
+
 function LoginPage() {
     const navigate = useNavigate()
     return (
