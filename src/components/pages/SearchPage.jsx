@@ -1,14 +1,12 @@
 import MyMapComponent from "../common/Maps";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { MyContext } from "../context/MyContext";
-import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function SearchPage() {
 
-     const {bands, setBands} = useContext(MyContext)
-    /*const { id } = useParams()*/
+    const {bands, setBands} = useContext(MyContext)
     
-
     return ( 
         <div className="search-page-container">
             <div className="search-bar p-3 d-flex align-items-center">
@@ -27,23 +25,17 @@ function SearchPage() {
                 </div>
             </div>
             <div className="search-page-middle-wrapper row p-3">
-                <div className="search-page-middle-left-side col-lg-6 col-md-6 col-sm-12 border border-2 mx-3 p-2">
-                    hello 
-                    <div className="card" style={{ width: "18rem" }}>
-                        <img src="https://images.pexels.com/photos/2479312/pexels-photo-2479312.jpeg?auto=compress&cs=tinysrgb&w=600" className="card-img-top" alt="..."></img>
-                            <div className="card-body">
-                            <div> {
-                        bands.map((band)=> ( 
-                            <h1 key={band.id}>{band.username}</h1> )
-                        )
-                    }</div>
+                <div className="search-page-middle-left-side col-lg-6 col-md-6 col-sm-12 ">
+                    {bands.map((band)=>(
+                    <div key={band.id} className="card my-2" style={{ width: "18rem" }}>
+                        <img src={band.profile_picture} className="card-img-top" alt="..."></img>
+                        <h5 className="band-title p-2">{band.username}</h5>
+                        <div className="card-body">
                             <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="profilepage" className="btn btn-primary">visit account</a>
-                            </div>
-                    </div>  
-
-
-
+                            <Link to={`/profilepage/${band.id}`} className="btn btn-primary">visit account</Link>
+                        </div>
+                    </div> 
+                     ))}
                 </div>
                 <div className="search-page-middle-right-side col-lg-5 col-md-5 col-sm-11 border border-2 mx-3 p-2">
                     <MyMapComponent/>

@@ -3,7 +3,7 @@
     background-color: #ffffff;
 }*/
 
-/* login page styles */
+/* LOGIN PAGE STYLES */
 
 
 /*.login-page-image-container {
@@ -87,17 +87,18 @@
     width: 300px;
 }
 
-/* profile page styles */
+/* PROFILE PAGE STYLES */
 
 .profile-page-img-container {
     position: relative;
-    width: 100%;
+    width: 100vw;
+    height: 75vh;
 }
 
-.profile-page-img-container {
+/* .profile-page-img-container {
     width: 100%;
     height: auto;
-}
+} */
 
 .profile-page-middle-images-container {
     display: inline-block;
@@ -120,6 +121,14 @@
     background-color: #FAFAF5;
     height: 200px;
 }
-.fade.modal-backdrop.show{
-    opacity: 0.8;
-   }
+
+/* SEARCH PAGE STYLES */
+
+.search-page-middle-left-side {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 2rem;
+    margin: 0 auto;
+    max-width: 1200px;
+}
