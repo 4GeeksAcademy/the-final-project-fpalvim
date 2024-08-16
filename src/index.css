@@ -176,6 +176,7 @@
     margin: 0 auto;
     max-width: 1200px;
 }
+
 .search-page-middle-right-side{
     background-color: rgb(221, 160, 221, 0.6);
     border: rgb(221, 160, 221, );
@@ -223,5 +224,13 @@
 /* MAP */
 .mapcontainer{
     border-radius: 20px;
+}
+
+
+
+/* MAPS COMPONENT STYLES */
+
+.pe-auto {
+    cursor: pointer;
 }
 

@@ -8,7 +8,7 @@ export const MyProvider = ({ children }) => {
     const [bands, setBands] = useState([])
 
     useEffect(()=>{
-        const fetchData = async ()=>{
+        const fetchData = async () => {
             const response = await axios.get("https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/bands")
             console.log(response.data);
             setBands(response.data)
