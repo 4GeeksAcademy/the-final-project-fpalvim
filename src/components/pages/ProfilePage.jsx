@@ -3,7 +3,7 @@ import ShowCalendar from "../common/ShowCalendar";
 import { MyContext } from "../context/MyContext";
 import { useParams } from "react-router-dom";
 import React from 'react';
-import Review from '../common/Review';
+
 
 function ProfilePage() {
 
