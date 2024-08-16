@@ -1,10 +1,8 @@
-import { useContext } from "react";
 import {Link} from "react-router-dom"
-import { MyContext } from "../context/MyContext";
+
 
 function Navbar() {
 
-    const {bands} = useContext(MyContext)
 
     return ( 
         

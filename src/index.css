@@ -138,3 +138,7 @@
 .pe-auto {
     cursor: pointer;
 }
+
+.pe-auto :hover {
+    background-color: rgb(241, 241, 196);
+}

@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import MapSearchBar from "../common/MapSearchBar";
 
 const Maps = () => {
   const [position, setPosition] = useState([51.505, -0.09]); // Default position
+
+  const RecenterMap = ({ position }) => {
+    const map = useMap();
+    useEffect(() => {
+      map.setView(position);
+    }, [position]);
+    
+    return null;
+  };
   
   return (
     <div>
@@ -19,6 +28,7 @@ const Maps = () => {
           <Link to= {`/profilepage`}><button>click to see more details</button></Link>
         </Popup>
       </Marker>
+      <RecenterMap position={position} />
     </MapContainer>
     </div>
   );

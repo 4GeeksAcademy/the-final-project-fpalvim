@@ -1,8 +1,38 @@
-import { Link } from "react-router-dom";
+
 import { useNavigate } from "react-router";
+import { useContext } from "react";
+import { MyContext } from "../context/MyContext";
+import axios from "axios";
+
 
 function LoginPage() {
     const navigate = useNavigate()
+    const {email, setEmail, password, setPassword, username, setUserName, address, setAddress, profilePicture, setProfilePicture, setPhoneNumber, profileType, setProfileType, setPosition} = useContext(MyContext)
+    const handleProfileTypeChange = (e) => {
+        setProfileType(e.target.value)
+    }
+
+    const handleSubmit = () => {
+        
+        const url = profileType === "band" ? "https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/band" : "https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/venue"
+        const formInputData = {
+            email_address: document.getElementById("inputEmail4").value,
+            username: document.getElementById("inputUsername").value,
+            password: document.getElementById("inputPassword4").value,
+            address: document.getElementById("inputAddress2").value,
+            profile_picture: document.getElementById("inputProfilePicture").value
+        }
+
+        axios.post(url, formInputData)
+        .then(function (response) {
+            alert("Account created successfully, please go to log in!");
+        })
+        .catch(function (error) {
+            alert("Error: Unable to create account, try again.");
+        });
+
+    }
+
     return (
         <div className="login-page-container mx-5">
             <div>
@@ -75,38 +105,26 @@ function LoginPage() {
                                         <input type="password" className="form-control" id="inputPassword4"></input>
                                     </div>
                                     <div className="col-12">
-                                        <label for="inputAddress" className="form-label">User Name</label>
-                                        <input type="text" className="form-control" id="inputAddress" placeholder="The Three Musketeers"></input>
+                                        <label for="inputUsername" className="form-label">Band or Venue Name</label>
+                                        <input type="text" className="form-control" id="inputUsername" placeholder="The Three Musketeers"></input>
+                                    </div>
+                                    <div className="col-12">
+                                        <label for="inputProfilePicture" className="form-label">URL of the profile picture</label>
+                                        <input type="text" className="form-control" id="inputProfilePicture" placeholder="E.g. https://www.instagram.com/metallica/?hl=en"></input>
                                     </div>
                                     <div className="col-12">
                                         <label for="inputAddress2" className="form-label">Address</label>
                                         <input type="text" className="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor"></input>
                                     </div>
-                                    <div className="col-md-6">
-                                        <label for="inputCity" className="form-label">Country</label>
-                                        <input type="text" className="form-control" id="inputCity"></input>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <label for="inputState" className="form-label">City</label>
-                                        <select id="inputState" className="form-select">
-                                        <option selected>Choose...</option>
-                                        <option>...</option>
+                                    <div className="mb-3">
+                                        <label htmlFor="profileType" className="form-label">Profile Type</label>
+                                        <select id="profileType" className="form-select" value={profileType} onChange={handleProfileTypeChange}>
+                                            <option value="band">Band</option>
+                                            <option value="venue">Venue</option>
                                         </select>
                                     </div>
-                                    <div className="col-md-2">
-                                        <label for="inputZip" className="form-label">Zip</label>
-                                        <input type="text" className="form-control" id="inputZip"></input>
-                                    </div>
                                     <div className="col-12">
-                                        <div className="form-check">
-                                            <input className="form-check-input" type="checkbox" id="gridCheck"></input>
-                                            <label className="form-check-label" for="gridCheck">
-                                                Keep me logged in
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div className="col-12">
-                                        <button  type="button" className="btn btn-primary" onClick={() => navigate('/loginpage')}>Create account</button>
+                                        <button  type="button" className="btn btn-primary" onClick={handleSubmit}>Create account</button>
                                     </div>
                                 </div>
                             </div>
