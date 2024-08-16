@@ -1,14 +1,72 @@
+import os
 import json
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt, get_jwt_identity
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
+from flask_jwt_extended import unset_jwt_cookies
+from datetime import datetime, timedelta, timezone
 
 app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://avnadmin:AVNS_LLhpu0aHZ0pOlhg5G2r@final-project-felipe-d067.l.aivencloud.com:21737/defaultdb?sslmode=require'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["JWT_SECRET_KEY"] = os.environ.get('JWT_SECRET')  # Change this!
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
+jwt = JWTManager(app)
 
 db = SQLAlchemy(app)
+
+@app.after_request
+def refresh_expiring_jwts(response):
+    try:
+        exp_timestamp = get_jwt()["exp"]
+        now = datetime.now(timezone.utc)
+        target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
+        if target_timestamp > exp_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+            data = response.get_json()
+            if type(data) is dict:
+                data["access_token"] = access_token 
+                response.data = json.dumps(data)
+        return response
+    except (RuntimeError, KeyError):
+        # Case where there is not a valid JWT. Just return the original respone
+        return response
+
+
+@app.route("/token", methods=["POST"])
+def create_token():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+    if email != "test" or password != "test":
+        return jsonify({"msg": "Bad username or password"}), 401
+
+    access_token = create_access_token(identity=email)
+    return jsonify(access_token=access_token)
+
+
+@app.route("/profile")
+@jwt_required()
+def my_profile():
+    response_body = {
+        "name": "Nagato",
+        "about" :"Hello! I'm a full stack developer that loves python and javascript"
+    }
+
+    return response_body
+
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    response = jsonify({"msg": "logout successful"})
+    unset_jwt_cookies(response)
+    return response
+
+
 
 class Band(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -23,7 +81,7 @@ class Band(db.Model):
     address = db.Column(db.String(1000), nullable = False)
     phone_number = db.Column(db.String(80), nullable = False)
     profile_picture = db.Column(db.String(2083), nullable = False)
-    # is_available = db.relationship('Available', backref='band', lazy=True)
+    is_available = db.relationship('Available', backref='band', lazy=True)
 
 class Venue(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -37,18 +95,20 @@ class Venue(db.Model):
     tags = db.Column(db.String(80))
     address = db.Column(db.String(1000), nullable = False)
     phone_number = db.Column(db.String(80), nullable = False)
-    # is_available = db.relationship('Available', backref='venue', lazy=True)
+    profile_picture = db.Column(db.String(2083), nullable = False)
+    is_available = db.relationship('Available', backref='venue', lazy=True)
 
-# class Available(db.model):
-#     is_booked = db.Column(db.String(255), unique=False)
-#     band_id = db.Column(db.Integer, db.ForeignKey('band.id'),nullable=False)
-#     venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'),nullable=False)
+class Available(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    date = db.Column(db.String(255), nullable = False)
+    band_id = db.Column(db.Integer, db.ForeignKey('band.id'),nullable=False)
+    venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'),nullable=False)
 
-# class Media(db.model):
-#     id = db.Column(db.Integer, primary_key = True)
-#     url = username = db.Column(db.String(255), nullable = False)
-#     band_id = db.Column(db.Integer, db.ForeignKey('band.id'),nullable=False)
-#     venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'),nullable=False)
+class Media(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    url = db.Column(db.String(255), nullable = False)
+    band_id = db.Column(db.Integer, db.ForeignKey('band.id'),nullable=False)
+    venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'),nullable=False)
 
 
 
@@ -74,8 +134,6 @@ def create_band():
     new_band = Band(email_address=data['email_address'],
                     username=data['username'],
                     password=data['password'],
-                    picture_id=data['picture_id'],
-                    phone_number=data['phone_number'],
                     address=data['address'],
                     profile_picture=data['profile_picture'])
     db.session.add(new_band)
@@ -94,7 +152,8 @@ def create_venue():
                     password=data['password'],
                     picture_id=data['picture_id'],
                     phone_number=data['phone_number'],
-                    address=data['address'])
+                    address=data['address'],
+                    profile_picture=data['profile_picture'])
     db.session.add(new_venue)
     db.session.commit()
     
@@ -123,7 +182,8 @@ def get_venues():
         'description': venue.description,
         'tags': venue.tags,
         'address': venue.address,
-        'phone_number': venue.phone_number
+        'phone_number': venue.phone_number,
+        'profile_picture': venue.profile_picture
     } for venue in venue])
 
 

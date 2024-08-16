@@ -4,13 +4,20 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import MapSearchBar from "../common/MapSearchBar";
 const Maps = () => {
   const [position, setPosition] = useState([51.505, -0.09]); // Default position
+
+
+
   const RecenterMap = ({ position }) => {
     const map = useMap();
     useEffect(() => {
       map.setView(position);
     }, [position]);
+
+
+    
     return null;
   };
+
   return (
     <div>
     <MapSearchBar onSelect={(coords) => setPosition(coords)}/>

@@ -5,11 +5,11 @@ import ProfilePage from "./components/pages/ProfilePage";
 import SearchPage from "./components/pages/SearchPage";
 import Navbar from "./components/common/Navbar";
 import ShowNavbar from "./components/common/ShowNavbar";
+
 function App() {
   return ( 
     <>
       <div>
-        
         <ShowNavbar>
           <Navbar />
         </ShowNavbar>  
@@ -20,7 +20,6 @@ function App() {
           <Route path="profilepage/:id" element={<ProfilePage />} />
           <Route path="searchpage/" element={<SearchPage />} />
         </Routes>
-
       </div>
     </>
    );
