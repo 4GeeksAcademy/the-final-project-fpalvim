@@ -29,18 +29,23 @@ function SearchPage() {
                     {bands.map((band)=>(
                     <div key={band.id} className="card my-2" style={{ width: "18rem" }}>
                         <img src={band.profile_picture} className="card-img-top" alt="..."></img>
-                        <h5 className="band-title p-2">{band.username}</h5>
-                        <div className="card-body">
+                        <h5 className="band-title p-2">{band.username} </h5>
+                        <div className="card-body ">
                             <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <Link to={`/profilepage/${band.id}`} className="btn btn-primary">visit account</Link>
+                            <button type="button" to={`/profilepage/${band.id}`} className="visit-acc-button">visit account</button>
                         </div>
                     </div> 
                      ))}
                 </div>
-                <div className="search-page-middle-right-side col-lg-5 col-md-5 col-sm-11 border border-2 mx-3 p-2">
+                <div className="search-page-middle-right-side col-lg-5 col-md-5 col-sm-11  mx-3 p-2">
                     <MyMapComponent/>
                 </div>
             </div>
+            <div className="nav justify-content-center">
+                    <button type="button" className="btn btn-link" onClick={() => navigate('/FaqsPage')}>FAQS</button>
+                    <button type="button" className="btn btn-link" onClick={() => navigate('/FaqsPage')}>about us</button>
+                    <button type="button" className="btn btn-link" onClick={() => navigate('/FaqsPage')}>contact</button>
+                </div>
         </div>
      );
 }

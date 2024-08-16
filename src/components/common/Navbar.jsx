@@ -2,7 +2,7 @@ import {Link} from "react-router-dom"
 
 function Navbar() {
     return ( 
-        <nav className="navbar navbar-expand-lg bg-body-tertiary">
+        <nav className="navbar navbar-custom navbar-expand-lg ">
             <div className="container-fluid">
                 <Link to="#" className="navbar-brand"><i className="bi bi-music-note-beamed fs-2"></i></Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,6 +15,7 @@ function Navbar() {
                         My profile
                     </Link>
                     <ul className="dropdown-menu">
+                        <li><Link to="profilepage" className="dropdown-item">My profile</Link></li>
                         <li><Link to="" className="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal">Edit profile</Link></li>
                         <li><Link to="searchpage" className="dropdown-item">start connecting</Link></li>
                         <li><hr className="dropdown-divider"></hr></li>
@@ -72,7 +73,7 @@ function Navbar() {
                                         </div>
                                     </div>
                                     <div className="col-12">
-                                        <button  type="button" className="btn btn-primary" onClick={() => navigate('/loginpage')}>Create account</button>
+                                        <button  type="button" className="edit-button" onClick={() => navigate('/profilepage/:id')}>Save Changes</button>
                                     </div>
                                 </div>
                             </div>

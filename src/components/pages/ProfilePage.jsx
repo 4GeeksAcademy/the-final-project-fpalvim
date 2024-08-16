@@ -2,6 +2,8 @@ import { useContext, useEffect } from "react";
 import ShowCalendar from "../common/ShowCalendar";
 import { MyContext } from "../context/MyContext";
 import { useParams } from "react-router-dom";
+import React from 'react';
+import Review from '../common/Review';
 
 function ProfilePage() {
 
@@ -31,15 +33,15 @@ function ProfilePage() {
             </div>
             <div div className="profile-page-middle d-flex flex-wrap row">
                 <div className="profile-page-middle-images-container col-lg-9 col-md-8 col-sm-12">
-                    <img src="https://picsum.photos/200" alt="" />
-                    <img src="https://picsum.photos/200" alt="" />
-                    <img src="https://picsum.photos/200" alt="" />
+                    <img className="profile-picuteres" src="https://picsum.photos/200" alt="" />
+                    <img className="profile-picuteres" src="https://picsum.photos/200" alt="" />
+                    <img className="profile-picuteres" src="https://picsum.photos/200" alt="" />
                 </div>
                 <div className="profile-page-middle-calendar col-lg-2 col-md-4 col-sm-12">
                     <ShowCalendar/>
                 </div>
             </div>
-            <div className="soundtrack-icons mx-4 mt-2 d-flex justify-content-start flex-wrap">
+            <div className="soundtrack-icons mx-4 mt-2 d-flex justify-content-between flex-wrap">
                 <i className="bi bi-music-note-beamed fs-2"></i>
                 <i className="bi bi-music-note-beamed fs-2"></i>
             </div>
@@ -58,20 +60,23 @@ function ProfilePage() {
                 </div>
             </div>
             <div className="profile-page-bottom d-flex flex-wrap p-5">
-                <div className="profile-page-bottom-left-box col-lg-3 col-md-4 col-sm-12 border border-2 rounded-4 mx-5 mb-3 mb-lg-0">
-                    <p>text here</p>
-                </div>
+           
                 <div className="profile-page-bottom-center-box col-lg-3 col-md-4 col-sm-12 border border-2 rounded-4 mx-5 mb-3 mb-lg-0">
                     <p>text here</p>
                 </div>
                 <div className="profile-page-bottom-right-box col-lg-4 col-md-12 col-sm-12">
-                    <div className="profile-page-bottom social-media-container d-flex justify-content-end mx-4 mt-3 mt-lg-0">
+                    <div className="profile-page-bottom-social-media-container d-flex justify-content-end mx-4 mt-3 mt-lg-0">
                         <i className="bi bi-music-note-beamed fs-2 mx-3"></i>
                         <i className="bi bi-music-note-beamed fs-2 mx-3"></i>
                         <i className="bi bi-music-note-beamed fs-2 mx-3"></i>
                     </div>
                 </div>
             </div>
+            <div className="nav justify-content-center">
+                    <button type="button" className="btn btn-link" onClick={() => navigate('/FaqsPage')}>FAQS</button>
+                    <button type="button" className="btn btn-link" onClick={() => navigate('/FaqsPage')}>about us</button>
+                    <button type="button" className="btn btn-link" onClick={() => navigate('/FaqsPage')}>contact</button>
+                </div>
         </div>
         
      );

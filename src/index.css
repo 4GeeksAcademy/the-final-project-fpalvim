@@ -13,32 +13,59 @@
 .login-page-top {
     position: relative;
 }
-.bg-picture{
-    background-image: url(https://images.pexels.com/photos/1587927/pexels-photo-1587927.jpeg?auto%3Dcompress%26cs%3Dtinysrgb%26w%3D600);
-    width: 100vw;
-    height: 50vw;
+
+.header-login{
+    background-color: lightpink;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    max-height: 100px;
+}
+.site-info-title{
+    width: 350px;
+    background-color: lightpink;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+.top-view{
+    height: 900px;
+    background-image: url(https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto%3Dcompress%26cs%3Dtinysrgb%26w%3D1200);
+    background-position: center;
+    border-radius: 20px;
 }
 .login-form {
     width: 20%;
-    margin-top: 23%;
+    margin-top: 290px;
 }
-#carouselExample{
-    width: 70%;
+#carouselExampleAutoplaying{
+    margin-left: 100px;
+    margin-top: 30px;
+    max-width: 400px;
 }
-.login-page-bottom-images-container {
-    display: flex;
-    justify-content: space-between;
-    padding: 2rem;
+ 
+
+.join-button{
+    border-color: black;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 10px 5px 5px lightpink;
+}
+.login-button{
+    border-color: peachpuff;
+    border-radius: 10px;
+    background-color: lightpink;
+}
+.btn-link{
+    color: purple;
+}
+.login-page-bottom{
+    background-color: rgb(221, 160, 221, 0.2);
+    border-radius: 15px;
+    max-width: fit-content;
 }
 
-.login-page-bottom-right-first-box,
-.login-page-bottom-right-second-box {
-    background-color: #FAFAF5;
-}
 
-.login-page-bottom img {
-    width: 300px;
-}
+
 /*.overlay-form {
     position: absolute;
     top: 50%;
@@ -104,11 +131,16 @@
     display: inline-block;
     justify-content: space-between;
     margin-right: 1rem;
+    background-color: rgb(221, 160, 221,0.2);
+    padding: 5px;
+    border-radius: 20px;
+    max-width: 1050px;
 }
 
 .profile-page-middle-images-container img {
     width: 300px;
     margin-left: 2rem;
+    border-radius: 5px;
 }
 
 .profile-page-bottom-left-box,
@@ -121,6 +153,18 @@
     background-color: #FAFAF5;
     height: 200px;
 }
+.soundtrack-icons{
+    background-color: rgb(221, 160, 221, 0.2);
+    max-width: 50px;
+    border-radius: 20px;
+    padding: 7px;
+}
+.profile-page-bottom-social-media-container{
+    background-color: rgb(221, 160, 221, 0.2);
+    border-radius: 20px;
+    padding: 7px;
+    max-width: 200px;
+}
 
 /* SEARCH PAGE STYLES */
 
@@ -132,3 +176,52 @@
     margin: 0 auto;
     max-width: 1200px;
 }
+.search-page-middle-right-side{
+    background-color: rgb(221, 160, 221, 0.6);
+    border: rgb(221, 160, 221, );
+    border-radius: 20px;
+    max-width: 800px;
+    max-height: fit-content;    
+}
+.card{
+    border-radius: 20px;
+}
+.card-body{
+    background-color: rgb(245, 245, 220,0.4);
+}
+.band-title{
+    background-color: rgb(240, 128, 128,0.2);
+}
+.visit-acc-button{
+    border-color: peachpuff;
+    border-radius: 10px;
+    background-color: lightpink;
+}
+/* Navbar styles */
+.navbar-custom{
+    margin-top: 20px;
+    background-color: lightpink;
+    border-radius: 20px;
+}
+.edit-button{
+    border-radius: 5px;
+    background-color: honeydew;
+    box-shadow: 5px 5px 5px lightpink;
+}
+.modal-footer,.modal-header{
+    background-color: rgb(221, 160, 221,0.4);
+    border-radius: 10px;
+}
+.modal-body{
+    background-color: rgb(255, 218, 185,0.2);
+}
+/* Bottom navbar */
+.nav{
+    background-color: lightpink;
+    border-radius: 20px;
+}
+/* MAP */
+.mapcontainer{
+    border-radius: 20px;
+}
+
