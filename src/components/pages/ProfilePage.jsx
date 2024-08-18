@@ -7,25 +7,26 @@ import React from 'react';
 
 function ProfilePage() {
 
-    const {bands, setBands} = useContext(MyContext)
+    const {users, setUsers} = useContext(MyContext)
     const { id } = useParams()
+    
 
     return ( 
         <div className="profile-page-container">
             <div className="user-band-venue-title d-flex justify-content-start mt-5 mb-4 mx-3">
                 <div>
                     {
-                        bands.map((band)=> band.id == id ? ( 
-                            <h1 key={band.id}>{band.username}</h1> ) : null
-                        )
+                        users.map((user)=> user.id == id ? (
+                            <h1 key={user.id}>{user.username}</h1>
+                        ) : null)
                     }
                 </div>
             </div>
             <div className="profile-page-top">
                 <div className="profile-page-top">
                     {
-                        bands.map((band)=> band.id == id ? (
-                            <img key={band.id} className="profile-page-img-container mb-4" src={band.profile_picture} alt=""></img>
+                        users.map((user)=> user.id == id ? (
+                            <img key={user.id} className="profile-page-img-container mb-4" src={user.profile_picture} alt=""></img>
                         ) : null)
                     }
                 </div>

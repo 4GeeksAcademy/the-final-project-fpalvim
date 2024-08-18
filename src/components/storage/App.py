@@ -79,7 +79,7 @@ class Band(db.Model):
     description = db.Column(db.String(5000))
     tags = db.Column(db.String(80))
     address = db.Column(db.String(1000), nullable = False)
-    phone_number = db.Column(db.String(80), nullable = False)
+    phone_number = db.Column(db.String(80))
     profile_picture = db.Column(db.String(2083), nullable = False)
     is_available = db.relationship('Available', backref='band', lazy=True)
 
@@ -94,22 +94,37 @@ class Venue(db.Model):
     description = db.Column(db.String(5000))
     tags = db.Column(db.String(80))
     address = db.Column(db.String(1000), nullable = False)
-    phone_number = db.Column(db.String(80), nullable = False)
+    phone_number = db.Column(db.String(80))
     profile_picture = db.Column(db.String(2083), nullable = False)
     is_available = db.relationship('Available', backref='venue', lazy=True)
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    email_address = db.Column(db.String(255), nullable = False)
+    username = db.Column(db.String(255), nullable = False)
+    password = db.Column(db.String(255), nullable = False)
+    is_active = db.Column(db.String(255), default = True)
+    description = db.Column(db.String(5000))
+    tags = db.Column(db.String(255))
+    address = db.Column(db.String(1000), nullable = False)
+    phone_number = db.Column(db.String(255))
+    profile_picture = db.Column(db.String(2083), nullable = False)
+    profile_type = db.Column(db.String(255))
+    # is_available = db.relationship('Available', backref='venue', lazy=True)
 
 class Available(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     date = db.Column(db.String(255), nullable = False)
     band_id = db.Column(db.Integer, db.ForeignKey('band.id'),nullable=False)
     venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'),nullable=False)
+    # user_id = db.Column(db.Integer, db.ForeignKey('venue.id'),nullable=False)
 
 class Media(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     url = db.Column(db.String(255), nullable = False)
     band_id = db.Column(db.Integer, db.ForeignKey('band.id'),nullable=False)
     venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'),nullable=False)
-
+    # user_id = db.Column(db.Integer, db.ForeignKey('venue.id'),nullable=False)
 
 
 with app.app_context():
@@ -125,6 +140,23 @@ def test():
     return jsonify("This is a test page!")
 
 
+@app.route('/user', methods=['POST'])
+def create_user():
+    data = request.get_json()
+    if not data:
+        return "You need to fill the form", 400
+    
+    new_user = User(email_address=data['email_address'],
+                    username=data['username'],
+                    password=data['password'],
+                    address=data['address'],
+                    profile_picture=data['profile_picture'],
+                    profile_type=data['profile_type'])
+    db.session.add(new_user)
+    db.session.commit()
+    
+    return jsonify({"message":"User created", "data":data}), 201
+
 @app.route('/band', methods=['POST'])
 def create_band():
     data = request.get_json()
@@ -135,7 +167,8 @@ def create_band():
                     username=data['username'],
                     password=data['password'],
                     address=data['address'],
-                    profile_picture=data['profile_picture'])
+                    profile_picture=data['profile_picture'],
+                    phone_number=data['phone_number'])
     db.session.add(new_band)
     db.session.commit()
     
@@ -150,14 +183,29 @@ def create_venue():
     new_venue = Venue(email_address=data['email_address'],
                     username=data['username'],
                     password=data['password'],
-                    picture_id=data['picture_id'],
-                    phone_number=data['phone_number'],
                     address=data['address'],
-                    profile_picture=data['profile_picture'])
+                    profile_picture=data['profile_picture'],
+                    phone_number=data['phone_number'])
     db.session.add(new_venue)
     db.session.commit()
     
     return jsonify({"message":"Venue created", "data":data}), 201
+
+@app.route('/users', methods=['GET'])
+
+def users():
+    user = User.query.all()
+    return jsonify([{
+        'id': user.id,
+        'username': user.username,
+        'description': user.description,
+        'tags': user.tags,
+        'address': user.address,
+        'phone_number': user.phone_number,
+        'profile_picture': user.profile_picture,
+        'profile_type': user.profile_type
+    } for user in user])
+
 
 @app.route('/bands', methods=['GET'])
 
@@ -187,19 +235,19 @@ def get_venues():
     } for venue in venue])
 
 
-@app.route("/band/<id>", methods=["PUT"])
+@app.route("/user/<id>", methods=["PUT"])
 def band_update(id):
-    band = Band.query.get(id)
-    tags = request.json['tags']
+    user = User.query.get(id)
+    profile_type = request.json['profile_type']
     
-    band.tags = tags
+    user.profile_type = profile_type
 
     response_body = {
-        "band tags" : tags
+        "profile_type" : profile_type
     }
 
     db.session.commit()
-    return jsonify({"message":"Band updated", "data":response_body}), 201
+    return jsonify({"message":"User updated", "data":response_body}), 201
 
 
 app.run(host='0.0.0.0', port=8787)

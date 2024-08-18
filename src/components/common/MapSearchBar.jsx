@@ -10,6 +10,7 @@ const MapSearchBar = ({ onSelect }) => {
             const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`);
             const data = await response.json();
             setResults(data);
+            console.log(data)
         }
     };
 
@@ -27,6 +28,7 @@ const MapSearchBar = ({ onSelect }) => {
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search for a place..."
+                    id="inputAddress2"
                 />
                 <button type="submit">Search</button>
             </form>
