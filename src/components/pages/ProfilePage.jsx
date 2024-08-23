@@ -2,84 +2,170 @@ import { useContext, useEffect } from "react";
 import ShowCalendar from "../common/ShowCalendar";
 import { MyContext } from "../context/MyContext";
 import { useParams } from "react-router-dom";
-import React from 'react';
-
+import { Link } from "react-router-dom";
+import React from "react";
 
 function ProfilePage() {
+  const { users, setUsers } = useContext(MyContext);
+  const { id } = useParams();
 
-    const {bands, setBands} = useContext(MyContext)
-    const { id } = useParams()
-
-    return ( 
-        <div className="profile-page-container">
-            <div className="user-band-venue-title d-flex justify-content-start mt-5 mb-4 mx-3">
-                <div>
-                    {
-                        bands.map((band)=> band.id == id ? ( 
-                            <h1 key={band.id}>{band.username}</h1> ) : null
-                        )
-                    }
-                </div>
+  return (
+    <div id="profile-container" className=" text-center">
+      <div className="row align-items-start">
+        <div className="col" id="left-column">
+          One of three columns
+          <div>
+            {users.map((user) =>
+              user.id == id ? (
+                <img
+                  key={user.id}
+                  className="profilepic"
+                  src={user.profile_picture}
+                  alt=""
+                ></img>
+              ) : null
+            )}
+          </div>
+          <br />
+          <div>
+            <div>
+              {users.map((user) =>
+                user.id == id ? <h1 key={user.id}>{user.username}</h1> : null
+              )}
             </div>
-            <div className="profile-page-top">
-                <div className="profile-page-top">
-                    {
-                        bands.map((band)=> band.id == id ? (
-                            <img key={band.id} className="profile-page-img-container mb-4" src={band.profile_picture} alt=""></img>
-                        ) : null)
-                    }
-                </div>
-                {/* <img className="profile-page-img-container mb-4" src="https://cdn.hobbyconsolas.com/sites/navi.axelspringer.es/public/media/image/2013/07/237499-metallica-cines-11-octubre.jpg?tf=1200x" alt="" /> */}
+            <br />
+            <br />
+            <br />
+            <br />
+            <div className="">
+              <h1>contact info</h1>
+              {users.map((user) =>
+                user.id == id ? (
+                  <div>
+                    <h4 key={user.id}>{user.phone_number}</h4>
+                    <h4 key={user.id}>{user.address}</h4>
+                    <h4 key={user.id}>{user.email_address}</h4>
+                  </div>
+                ) : null
+              )}
             </div>
-            <div div className="profile-page-middle d-flex flex-wrap row">
-                <div className="profile-page-middle-images-container col-lg-9 col-md-8 col-sm-12">
-                    <img className="profile-picuteres" src="https://picsum.photos/200" alt="" />
-                    <img className="profile-picuteres" src="https://picsum.photos/200" alt="" />
-                    <img className="profile-picuteres" src="https://picsum.photos/200" alt="" />
-                </div>
-                <div className="profile-page-middle-calendar col-lg-2 col-md-4 col-sm-12">
-                    <ShowCalendar/>
-                </div>
-            </div>
-            <div className="soundtrack-icons mx-4 mt-2 d-flex justify-content-between flex-wrap">
-                <i className="bi bi-music-note-beamed fs-2"></i>
-                <i className="bi bi-music-note-beamed fs-2"></i>
-            </div>
-            <div className="profile-page-middle-below d-flex flex-wrap mx-4 mt-2">
-                <div className="profile-page-middle-below-details-text-box col-lg-9 col-md-8 col-sm-12">
-                    <p>We believe in produce. Tasty produce. Produce like:</p> <br />
-                    <p>Apples. Oranges. Limes. Lemons. Guavas. Carrots. Cucumbers. Jicamas. Cauliflowers. Brussels sprouts. Shallots. Japanese eggplants. Asparagus. Artichokes-Jerusalem artichokes, too. Radishes. Broccoli. Baby broccoli. Broccolini. Bok choy. Scallions. Ginger. Cherries. Raspberries. Cilantro. Parsley. Dill. </p>
-                </div>
-                <div className="profile-page-middle-below-right-side d-flex flex-row col-lg-3 col-md-4 col-sm-12 mt-3 mt-md-0">
-                    <div className="profile-page-middle-below-right-side-about border border-2 rounded-4 mx-2 mb-3">
-                        <p>specific details about the venue or band</p>
-                    </div>
-                    <div className="profile-page-middle-below-right-side-genre border border-2 rounded-4 mx-2">
-                        <p>details about the genre of band or venue</p>
-                    </div>
-                </div>
-            </div>
-            <div className="profile-page-bottom d-flex flex-wrap p-5">
-           
-                <div className="profile-page-bottom-center-box col-lg-3 col-md-4 col-sm-12 border border-2 rounded-4 mx-5 mb-3 mb-lg-0">
-                    <p>text here</p>
-                </div>
-                <div className="profile-page-bottom-right-box col-lg-4 col-md-12 col-sm-12">
-                    <div className="profile-page-bottom-social-media-container d-flex justify-content-end mx-4 mt-3 mt-lg-0">
-                        <i className="bi bi-music-note-beamed fs-2 mx-3"></i>
-                        <i className="bi bi-music-note-beamed fs-2 mx-3"></i>
-                        <i className="bi bi-music-note-beamed fs-2 mx-3"></i>
-                    </div>
-                </div>
-            </div>
-            <div className="nav justify-content-center">
-                    <button type="button" className="btn btn-link" onClick={() => navigate('/FaqsPage')}>FAQS</button>
-                    <button type="button" className="btn btn-link" onClick={() => navigate('/FaqsPage')}>about us</button>
-                    <button type="button" className="btn btn-link" onClick={() => navigate('/FaqsPage')}>contact</button>
-                </div>
+          </div>
+          
         </div>
-        
-     );
+        <div className="col" id="middle-column">
+          <div className="">
+            One of three columns
+            <div className="topdiv-middle">
+              <h1>Our bio</h1>
+              <h4>
+                introduction of the band: Hello we are the 4geeks and we play
+                the most nerdy insturments on the planets starting with the
+                triangle.
+              </h4>
+              <div className="input-group">
+                {users.map((user) =>
+                  user.id == id ? <p key={user.id}>{user.description}</p> : null
+                )}
+              </div>
+            </div>
+            <div className="middiv-middle">
+              <h4>genres</h4>
+            </div>
+            <div className="botdiv-middle d-flex align-content-center">
+              <div
+                id="carouselExampleAutoplaying"
+                className="carousel slide col"
+                data-bs-ride="carousel"
+              >
+                <div className="carousel-inner">
+                  <div className="carousel-item active">
+                    <img
+                      src="https://images.pexels.com/photos/167092/pexels-photo-167092.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                      className="d-block w-100"
+                      alt=""
+                    ></img>
+                  </div>
+                  <div className="carousel-item">
+                    <img
+                      src="https://images.pexels.com/photos/144429/pexels-photo-144429.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                      className="d-block w-100"
+                      alt=""
+                    ></img>
+                  </div>
+                  <div className="carousel-item">
+                    <img
+                      src="https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                      className="d-block w-100"
+                      alt=""
+                    ></img>
+                  </div>
+                </div>
+                <button
+                  className="carousel-control-prev"
+                  type="button"
+                  data-bs-target="#carouselExampleAutoplaying"
+                  data-bs-slide="prev"
+                >
+                  <span
+                    className="carousel-control-prev-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span className="visually-hidden">Previous</span>
+                </button>
+                <button
+                  className="carousel-control-next"
+                  type="button"
+                  data-bs-target="#carouselExampleAutoplaying"
+                  data-bs-slide="next"
+                >
+                  <span
+                    className="carousel-control-next-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span className="visually-hidden">Next</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col d-flex justify-content-center" id="right-column">
+          One of three columns
+          <div className="topdiv-right">
+            <div>
+            <iframe
+              src="https://open.spotify.com/embed/artist/33qOK5uJ8AR2xuQQAhHump?utm_source=generator&theme=0"
+              width="100%"
+              height="360"
+              frameborder="0"
+              allowtransparency="true"
+              allow="encrypted-media"
+              data-gtm-yt-inspected-6="true"
+            ></iframe>
+          </div>
+          <div className="middiv-right">
+            <h1>reviews</h1>
+            <div className="input-group">
+              {users.map((user) =>
+                user.id == id ? <p key={user.id}>{user.comments}</p> : null
+              )}
+            </div>
+          </div>
+          <div className="botdiv-right">
+            <h1>socials</h1>
+            <div className="">
+              <Link target="_blank" to="https://open.spotify.com/artist/33qOK5uJ8AR2xuQQAhHump?si=Wn4CICCNSRyXRz9dD-l-cg">
+                <i id="spotify-icon" class="bi bi-spotify"></i>
+              </Link>
+              <Link target="_blank" to="https://www.youtube.com/@TeddySwims">
+                <i id="youtube-icon" class="bi bi-youtube"></i>
+              </Link>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default ProfilePage;

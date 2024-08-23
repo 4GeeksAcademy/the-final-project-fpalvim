@@ -22,7 +22,7 @@ const MapSearchBar = ({ onSelect }) => {
     return (
         <div>
             <form onSubmit={handleSearch}>
-                <input
+                <input className='searchMap'
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}

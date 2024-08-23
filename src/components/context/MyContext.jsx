@@ -6,6 +6,8 @@ export const MyContext = createContext(null)
 export const MyProvider = ({ children }) => {
     const [calDate, setCalDate] = useState()
     const [bands, setBands] = useState([])
+    const [venues, setVenues] = useState([])
+    const [users, setUsers] = useState([])
     const [email, setEmail] = useState("")
     const [userName, setUserName] = useState("")
     const [password, setPassword] = useState("")
@@ -18,17 +20,20 @@ export const MyProvider = ({ children }) => {
     const [profileType, setProfileType] = useState("band")
 
     useEffect(()=>{
-        const fetchData = async () => {
-            const response = await axios.get("https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/bands")
+        const fetchUsers = async () => {
+            const response = await axios.get("https://automatic-fishstick-7vw6jv95wvrcg6x-8787.app.github.dev/users")
             console.log(response.data);
-            setBands(response.data)
+            setUsers(response.data)
         }
-        fetchData()
+        
+        fetchUsers()
     },[])
 
     return (
         <MyContext.Provider value={{calDate, setCalDate,
                                     bands, setBands,
+                                    venues, setVenues,
+                                    users, setUsers,
                                     email, setEmail,
                                     userName, setUserName,
                                     password, setPassword,
