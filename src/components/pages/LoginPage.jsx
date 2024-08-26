@@ -59,6 +59,7 @@ function LoginPage() {
             <li className="nav-item">
               <a
                 className="nav-link active"
+                style={{ color: "white" }}
                 aria-current="page"
                 href="/searchpage"
               >
@@ -139,6 +140,7 @@ function LoginPage() {
           <button
             type="button"
             className="login-button"
+            style={{ color: "white" }}
             onClick={() => navigate("/profilepage")}
           >
             Log in
@@ -187,6 +189,7 @@ function LoginPage() {
             tabindex="-1"
             aria-labelledby="exampleModalLabel"
             aria-hidden="true"
+            style={{ color: "white" }}
           >
             <div className="modal-dialog">
               <div className="modal-content">
@@ -273,8 +276,9 @@ function LoginPage() {
                     <div className="col-12">
                       <button
                         type="submit"
-                        className="btn btn-primary"
+                        className="create-account-button"
                         onsubmit={handleSubmit}
+                        style={{ color: "white" }}
                       >
                         Create account
                       </button>
@@ -315,6 +319,8 @@ function LoginPage() {
                   Create Your Profile
                 </a>
               </div>
+              <br />
+              <br />
               <div className="card-footer text-body-secondary">
                 "Where words fail, music speaks." – Hans Christian Andersen
               </div>
@@ -442,7 +448,7 @@ function LoginPage() {
         <button
           type="button"
           className="btn btn-link"
-          onClick={() => navigate("/FaqsPage")}
+          onClick={() => navigate("/faqspage")}
         >
           FAQS
         </button>

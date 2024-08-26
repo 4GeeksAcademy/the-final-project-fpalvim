@@ -20,6 +20,7 @@ const Maps = () => {
               username: user.username,
               position: [data[0].lat, data[0].lon],
               profile_type: user.profile_type,
+              profile_picture: user.profile_picture
             };
           }
           return null;
@@ -36,7 +37,7 @@ const Maps = () => {
   }, [users, loggedInUserId]);
   if (!position) {
     return <div className="d-flex justify-content-center p-5 my-5">
-    <div class="spinner-border" role="status"></div>
+    <div className="spinner-border" role="status"></div>
   </div>
   }
   return (
@@ -50,11 +51,14 @@ const Maps = () => {
         />
         {markers.map((marker) => (
           <Marker key={marker.id} position={marker.position}>
-            <Popup className='marker-popup d-flex justify-content-center'>
+            <Popup className='marker-popup'>
+            <img src={marker.profile_picture} className="map-picture" alt="..."></img>
               <Link to={`/profilepage/${marker.id}`}>
               <button className="visit-acc-button">{marker.username}</button>
               </Link>
               <h6 className="marker-profile-type d-flex justify-content-center">{marker.profile_type}</h6>
+
+
             </Popup>
           </Marker>
         ))}

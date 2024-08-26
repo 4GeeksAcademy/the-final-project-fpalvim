@@ -1,5 +1,5 @@
 function FaqsPage (){ 
-    <div>
+    return( <div>
         <h4>
         # Frequently Asked Questions (FAQs)
 
@@ -33,6 +33,7 @@ Currently, GigLink is accessible through web browsers on mobile devices, but we 
 ### 10. How do I report a problem with another user?
 If you encounter any issues with another user, please use the 'Report User' feature on their profile to notify our team for further investigation.
         </h4>
-    </div>
+    </div>)
+   
 }
 export default FaqsPage;

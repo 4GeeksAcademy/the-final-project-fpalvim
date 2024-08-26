@@ -15,11 +15,13 @@ function SearchPage() {
                 <input className="search-bar-input w-75" type="text" placeholder="What are you looking for?"></input>
                 <button><i className="bi bi-search"></i></button>
             </div>
-            
-            <div className="search-page-middle-wrapper row p-3">
+        
+            <div className="search-page-middle-wrapper  auto p-3">
+            <Maps/>
                 <div className="search-page-middle-left-side">
+                
                     {filteredUsers.map((filteredUser)=>(
-                        <div className="card-holder mb-5" style={{zIndex: 4, position:"relative", top:"2250px", left:"50px"}}>
+                        <div className="card-holder col auto mb-5" style={{zIndex: 4, position:"relative", top:"-150px", left:"50px"}}>
                     <div key={filteredUser.id} className="card " style={{width: "300px", height:"450px",}}>
                         <img src={filteredUser.profile_picture} className="card-img-top" alt="..."></img>
                         <h5 className="band-title p-2">{filteredUser.username} </h5>
@@ -34,7 +36,7 @@ function SearchPage() {
                 
                     <div className=" text-center">
                         <h1 className="">hellp</h1>
-                    <Maps/>
+                        
                     
                 </div>
             </div>
