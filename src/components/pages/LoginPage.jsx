@@ -277,6 +277,7 @@ function LoginPage() {
                       <button
                         type="submit"
                         className="create-account-button"
+                        data-bs-dismiss="modal"
                         onsubmit={handleSubmit}
                         style={{ color: "white" }}
                       >

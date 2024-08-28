@@ -8,6 +8,7 @@ const Maps = () => {
   const [markers, setMarkers] = useState([]);
   const { users } = useContext(MyContext)
   const loggedInUserId = 1;
+  
   useEffect(() => {
     const fetchAllCoordinates = async () => {
       const allMarkers = await Promise.all(

@@ -1,0 +1,10 @@
+.available {
+    background-color: rgb(26, 162, 26);
+    color: white;
+
+}
+
+.selected {
+    background-color: blue;
+    color: white;
+}

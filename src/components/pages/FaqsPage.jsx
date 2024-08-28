@@ -1,5 +1,5 @@
 function FaqsPage (){ 
-    return( <div>
+    return( <div style={{ color: "white" }}>
         <h4>
         # Frequently Asked Questions (FAQs)
 
