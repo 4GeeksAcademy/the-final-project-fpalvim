@@ -1,25 +1,28 @@
 import React, { useState } from 'react';
-
 const MapSearchBar = ({ onSelect }) => {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
-
+    const API_KEY = '7dc0f065e04d40339d145a08e98b49a9';
     const handleSearch = async (e) => {
         e.preventDefault();
         if (query.length > 0) {
-            const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`);
-            const data = await response.json();
-            setResults(data);
-            console.log(data)
+            try {
+                const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(query)}&key=${API_KEY}`);
+                const data = await response.json();
+                if (data.results) {
+                    setResults(data.results);
+                }
+                console.log(data);
+            } catch (error) {
+                console.error("Error fetching data from OpenCage API:", error);
+            }
         }
     };
-
     const handleSelect = (result) => {
-        setQuery(result.display_name);
+        setQuery(result.formatted);
         setResults([]);
-        onSelect([result.lat, result.lon]);
+        onSelect([result.geometry.lat, result.geometry.lng]);
     };
-
     return (
         <div>
             <form onSubmit={handleSearch}>
@@ -35,12 +38,23 @@ const MapSearchBar = ({ onSelect }) => {
             <div className="pe-auto">
                 {results.map(result => (
                     <p className="results-search-map border rounded border-2px m-0" key={result.place_id} onClick={() => handleSelect(result)}>
-                        {result.display_name}
+                        {result.formatted}
                     </p>
                 ))}
             </div>
         </div>
     );
 };
-
 export default MapSearchBar;
+
+
+
+
+
+
+
+
+
+
+
+

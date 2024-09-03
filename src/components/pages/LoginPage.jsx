@@ -1,17 +1,24 @@
 import { useNavigate } from "react-router";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { MyContext } from "../context/MyContext";
 import axios from "axios";
+import React, { useRef, } from "react";
+import MapSearchBar from "../common/MapSearchBar";
+
+
 
 function LoginPage() {
+  
+
   const navigate = useNavigate();
   const {
+    users,
     email,
     setEmail,
     password,
     setPassword,
     username,
-    setUserName,
+    setUsername,
     address,
     setAddress,
     profilePicture,
@@ -20,36 +27,86 @@ function LoginPage() {
     profileType,
     setProfileType,
     setPosition,
+    userData,
+    setUserData
   } = useContext(MyContext);
+  const [error, setError] = useState("")
+  const user = users.find(user => user.username === document.getElementById("userInputLogin").value);
+  const handleLogin = () => {
+    const url = "https://didactic-capybara-7v7r7g6p7jx43p5wg-8787.app.github.dev/login"
+    const username = document.getElementById("userInputLogin").value
+    const password = document.getElementById("passwordInputLogin").value
+    const data = {
+      username: username,
+      password: password
+    }
+    fetch(url, {
+      method:'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log("Response from server:", data);
+      localStorage.setItem("token", data.access_token)
+      console.log(data.user_db.id);
+      console.log(data.user_db.profile_type);
+      localStorage.setItem('userId', data.user_db.id)
+      localStorage.setItem('profileType', data.user_db.profile_type)
+      setUserData(data.user_db)
+      navigate(`/profilepage/${data.user_db.id}`);
+    })
+    .catch((error) => {
+      console.error("Error making request:", error)
+    })
+  }
   const handleProfileTypeChange = (e) => {
     setProfileType(e.target.value);
   };
-
   const handleSubmit = () => {
-    const url =
-      profileType === "band"
-        ? "https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/band"
-        : "https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/venue";
-    const formInputData = {
-      email_address: document.getElementById("inputEmail4").value,
-      username: document.getElementById("inputUsername").value,
-      password: document.getElementById("inputPassword4").value,
-      address: document.getElementById("inputAddress2").value,
-      profile_picture: document.getElementById("inputProfilePicture").value,
-    };
-
-    axios
-      .post(url, formInputData)
-      .then(function (response) {
-        alert("Account created successfully, please go to log in!");
-      })
-      .catch(function (error) {
-        alert("Error: Unable to create account, try again.");
-      });
-  };
+    const url = "https://didactic-capybara-7v7r7g6p7jx43p5wg-8787.app.github.dev/user"
+    const email_address = document.getElementById("inputEmail4").value
+    const username = document.getElementById("inputUsername").value
+    const password = document.getElementById("inputPassword4").value
+    const address = document.getElementById("inputAddress2").value
+    const profile_picture = document.getElementById("inputProfilePicture").value
+    const profile_type = document.getElementById("profileType").value
+    const data = {
+      email_address: email_address,
+      username: username,
+      password: password,
+      address: address,
+      profile_picture: profile_picture,
+      profile_type: profile_type
+    }
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log("Reponse from server:", data);
+    })
+    .catch((error) => {
+      console.error("Error making request:", error)
+    })
+  }
+  const spotlightEl = document.querySelector("#spotlight");
+  function handleMouseMove(event) {
+      const { clientX, clientY } = event;
+      spotlightEl.style.background = `radial-gradient(circle at ${clientX}px ${clientY}px, #00000000 10px, #000000ee 350px)`;
+  }
+  document.addEventListener("mousemove", handleMouseMove)
 
   return (
+    
     <div className="login-page-container">
+   
       <div className="header-login d-flex justify-content-between ">
         <div>
           <h1 className="logo">some room for logo</h1>
@@ -66,26 +123,11 @@ function LoginPage() {
                 Explore
               </a>
             </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">
-                Link
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">
-                Link
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link disabled" aria-disabled="true">
-                Disabled
-              </a>
-            </li>
           </ul>
         </div>
       </div>
-      <div className="top-view row">
-        <form className="login-form">
+      <div className="top-view row justify-content-center">
+        <form className="login-form ">
           <div className="mb-3">
             <h1 style={{ color: "white" }}>Welcome to Giglink</h1>
             <label
@@ -93,12 +135,15 @@ function LoginPage() {
               className="form-label"
               style={{ color: "white" }}
             >
-              Email address
+              Username
             </label>
             <input
-              type="email"
+              type="text"
+              value={username}
+              onChange={(e)=>setUsername(e.target.value)}
+              required
               className="form-control"
-              id="exampleInputEmail1"
+              id="userInputLogin"
               aria-describedby="emailHelp"
             ></input>
             <div
@@ -119,8 +164,10 @@ function LoginPage() {
             </label>
             <input
               type="password"
+              value={password}
+              onChange={(e)=>setPassword(e.target.value)} required
               className="form-control"
-              id="exampleInputPassword1"
+              id="passwordInputLogin"
             ></input>
           </div>
           <div className="mb-3 form-check">
@@ -140,27 +187,26 @@ function LoginPage() {
           <button
             type="button"
             className="login-button"
-            style={{ color: "white" }}
-            onClick={() => navigate("/profilepage")}
+            onClick={handleLogin}
           >
             Log in
           </button>{" "}
           <button
             type="button"
             className="btn btn-link"
-            onClick={() => navigate("/FaqsPage")}
             style={{ color: "white" }}
           >
             Forgot my password
           </button>
-          <button
-            type="button"
-            className="btn btn-link"
-            onClick={() => navigate("/FaqsPage")}
-            style={{ color: "white" }}
-          >
-            Create a new account
-          </button>
+          <a
+                  href="#"
+                  className="btn btn-link"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                  style={{ color: "white" }}
+                >
+                  Create Your Profile
+                </a>
         </form>
       </div>
       <div className="login-page-middle ">
@@ -182,118 +228,57 @@ function LoginPage() {
             one seamless experience. <br /> Join GigLink today and transform the
             way you book live music!
           </p>
-
-          <form
-            className="modal fade"
-            id="exampleModal"
-            tabindex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-            style={{ color: "white" }}
-          >
-            <div className="modal-dialog">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h1 className="modal-title fs-5" id="exampleModalLabel">
-                    Ready for your musical adventure?
-                  </h1>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div className="modal-body">
-                  <div className="row g-3">
-                    <div className="col-md-6">
-                      <label for="inputEmail4" className="form-label">
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        className="form-control"
-                        id="inputEmail4"
-                      ></input>
+          <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h1 className="modal-title fs-5" id="exampleModalLabel">Ready for your musical adventure?</h1>
+                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                            <div className="modal-body">
+                                <div className="row g-3">
+                                    <div className="col-md-6">
+                                        <label for="inputEmail4" className="form-label">Email</label>
+                                        <input type="email" className="form-control" id="inputEmail4"></input>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <label for="inputPassword4" className="form-label">Password</label>
+                                        <input type="password" className="form-control" id="inputPassword4"></input>
+                                    </div>
+                                    <div className="col-12">
+                                        <label for="inputUsername" className="form-label">Band or Venue Name</label>
+                                        <input type="text" className="form-control" id="inputUsername" placeholder="The Three Musketeers"></input>
+                                    </div>
+                                    <div className="col-12">
+                                        <label for="inputProfilePicture" className="form-label">URL of the profile picture</label>
+                                        <input type="text" className="form-control" id="inputProfilePicture" placeholder="E.g. https://www.instagram.com/metallica/?hl=en"></input>
+                                    </div>
+                                    <div className="col-12">
+                                        <label for="inputAddress2" className="form-label">Address</label>
+                                        <MapSearchBar/>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="profileType" className="form-label">Profile Type</label>
+                                        <select id="profileType" className="form-select">
+                                            <option value="band">Band</option>
+                                            <option value="venue">Venue</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-12">
+                                        <button  type="submit" className="btn btn-primary" onClick={handleSubmit}>Create account</button>
+                                    </div>
+                                </div>
+                            </div>
+                                <div className="modal-footer"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="col-md-6">
-                      <label for="inputPassword4" className="form-label">
-                        Password
-                      </label>
-                      <input
-                        type="password"
-                        className="form-control"
-                        id="inputPassword4"
-                      ></input>
-                    </div>
-                    <div className="col-12">
-                      <label for="inputUsername" className="form-label">
-                        Band or Venue Name
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="inputUsername"
-                        placeholder="The Three Musketeers"
-                      ></input>
-                    </div>
-                    <div className="col-12">
-                      <label for="inputProfilePicture" className="form-label">
-                        URL of the profile picture
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="inputProfilePicture"
-                        placeholder="E.g. https://www.instagram.com/metallica/?hl=en"
-                      ></input>
-                    </div>
-                    <div className="col-12">
-                      <label for="inputAddress2" className="form-label">
-                        Address
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="inputAddress2"
-                        placeholder="Apartment, studio, or floor"
-                      ></input>
-                    </div>
-                    <div className="mb-3">
-                      <label htmlFor="profileType" className="form-label">
-                        Profile Type
-                      </label>
-                      <select
-                        id="profileType"
-                        className="form-select"
-                        value={profileType}
-                        onChange={handleProfileTypeChange}
-                      >
-                        <option value="band">Band</option>
-                        <option value="venue">Venue</option>
-                      </select>
-                    </div>
-                    <div className="col-12">
-                      <button
-                        type="submit"
-                        className="create-account-button"
-                        data-bs-dismiss="modal"
-                        onsubmit={handleSubmit}
-                        style={{ color: "white" }}
-                      >
-                        Create account
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="modal-footer"></div>
-              </div>
-            </div>
-          </form>
         </div>
-        <div className="for-accounts container d-flex justify-content-between">
-          <div className="left-account" style={{ color: "white" }}>
+        <div id="spotlight" style={{zIndex: 2}}></div>
+           <div className="for-accounts container-fluid row justify-content-center">
+          <div className="left-account col-md">
             <div className="card-left text-center">
+              <img className="leftImage" src="https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="" />
               <div className="card-header">
                 <h1>ARTISTS ACCOUNT</h1>
               </div>
@@ -309,25 +294,13 @@ function LoginPage() {
                   and book your next performance with ease.
                 </p>
                 <br />
-                <br />
-                <a
-                  href="#"
-                  className="left-account-button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#exampleModal"
-                  style={{ color: "white" }}
-                >
-                  Create Your Profile
-                </a>
               </div>
-              <br />
-              <br />
               <div className="card-footer text-body-secondary">
                 "Where words fail, music speaks." – Hans Christian Andersen
               </div>
             </div>
           </div>
-          <div className="middle-wrapper d-flex flex-column justify-content-start">
+          <div className="middle-wrapper col-md d-flex flex-column justify-content-start">
             <h1 style={{ color: "white" }}>Ready to join GigLink?</h1>
             <br />
             <button
@@ -340,9 +313,9 @@ function LoginPage() {
               start here
             </button>
           </div>
-
-          <div className="right-account" style={{ color: "white" }}>
+          <div className="right-account col-md">
             <div class="card-right text-center">
+              <img className="rightImage" src="https://images.pexels.com/photos/27781607/pexels-photo-27781607/free-photo-of-the-interior-of-a-large-auditorium-with-a-large-orchestra.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="" />
               <div className="card-header">
                 <h1>VENUES ACCOUNT</h1>
               </div>
@@ -350,7 +323,7 @@ function LoginPage() {
               <br />
               <div className="card-body">
                 <h5 className="card-title">
-                  Find the Perfect Artists for Your Events
+                  Find Artists for Your Events
                 </h5>
                 <br />
                 <p className="card-text">
@@ -360,25 +333,17 @@ function LoginPage() {
                   your event lineup today!
                 </p>
                 <br />
-                <br />
-                <a
-                  href="#"
-                  class="right-account-button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#exampleModal"
-                  style={{ color: "white", height: "70px" }}
-                >
-                  Set Up Your Venue
-                </a>
               </div>
-              <div className="card-footer text-body-secondary">
+              <p style={{ color: "white" }} className="card-footer text-body-secondary">
                 "Music can change the world because it can change people." –
                 Bono
-              </div>
+              </p>
             </div>
           </div>
-        </div>
+           </div>
       </div>
+      <br />
+      <br />
       <div className="login-page-bottom d-flex pb-5 container text-center">
         <div className="row align-items-start">
           <div
@@ -389,21 +354,21 @@ function LoginPage() {
             <div className="carousel-inner">
               <div className="carousel-item active">
                 <img
-                  src="https://images.pexels.com/photos/167092/pexels-photo-167092.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                  src=""
                   className="d-block w-100"
                   alt=""
                 ></img>
               </div>
               <div className="carousel-item">
                 <img
-                  src="https://images.pexels.com/photos/144429/pexels-photo-144429.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                  src=""
                   className="d-block w-100"
                   alt=""
                 ></img>
               </div>
               <div className="carousel-item">
                 <img
-                  src="https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                  src=""
                   className="d-block w-100"
                   alt=""
                 ></img>
@@ -444,7 +409,6 @@ function LoginPage() {
           </div>
         </div>
       </div>
-
       <div className="nav justify-content-center">
         <button
           type="button"
@@ -468,6 +432,7 @@ function LoginPage() {
           contact
         </button>
       </div>
+     
     </div>
   );
 }

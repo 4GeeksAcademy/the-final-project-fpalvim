@@ -4,14 +4,12 @@ import { MyContext } from "../context/MyContext";
 import MapSearchBar from "./MapSearchBar";
 import Select from "react-select";
 import axios from "axios";
-
-
 function Navbar() {
-    const { users, tags, userTags, id, selectedTags, setSelectedTags, formattedTags, setFormattedTags, images } = useContext(MyContext);
-    const [photos, setPhotos] = useState([]);
-    const [imgPreview, setImagePreview] = useState();
+    const { users, tags, userTags, setUserTags, id, selectedTags, setSelectedTags, formattedTags, setFormattedTags, images, setImages } = useContext(MyContext);
+    const [imgPreview, setImagePreview] = useState("");
     const filteredUser = users.filter(user => user.id == id);
-
+    const userId = localStorage.getItem("userId")
+    console.log(userId);
     useEffect(() => {
         if (Array.isArray(tags)) {
             const formatted = tags.map(tag => ({
@@ -19,7 +17,6 @@ function Navbar() {
                 label: tag.charAt(0).toUpperCase() + tag.slice(1)
             }));
             setFormattedTags(formatted);
-
             if (userTags.length > 0) {
                 const initialSelectedTags = userTags.map(utag => {
                     const matchingTag = formatted.find(tag => tag.value === utag);
@@ -31,51 +28,51 @@ function Navbar() {
             console.error("Expected 'tags' to be an array, but got:", typeof tags);
         }
     }, [tags, userTags]);
-
     const handleChange = (selectedOptions) => {
         setSelectedTags(selectedOptions || []);
     }
-
-
     function imagePreview(e){
         setImagePreview(document.getElementById("inputFilePath").value)
-        return(
-            <div>
-                <img src="" alt="" />
-            </div>
-        )
-    }     
-    
-
+    }
     const handlePhotos = () => {
-
-        const url = `https://super-duper-fortnight-7gvwxjxgjj7fr957-8787.app.github.dev/photos/${id}`;
-        
+        const url = `https://super-duper-fortnight-7gvwxjxgjj7fr957-8787.app.github.dev/photos/${userId}`;
         const formInputData = {
             filename: document.getElementById("inputFileName").value,
             filepath: document.getElementById("inputFilePath").value
         }
-
-
         axios.post(url, formInputData)
             .then(response => {
                 alert("Photo uploaded successfully.");
+                const updatePhotos = response.data.data;
+                setImages(prevPhotos => [...prevPhotos, updatePhotos]);
+                setImagePreview("")
+                document.getElementById("inputFilePath").value = '';
             })
             .catch(error => {
                 console.error("Error:", error.response ? error.response.data : error.message);
                 alert("Error: Unable to upload photo, try again.");
             });
-
     }
-
+const handleDelete = async (photoId) => {
+    try {
+        const response = await fetch(`https://super-duper-fortnight-7gvwxjxgjj7fr957-8787.app.github.dev/photos/${userId}/${photoId}`, {
+            method: 'DELETE',
+        });
+        if (!response.ok) {
+            throw new Error('Failed to delete photo');
+        }
+        setImages(images.filter(image => image.id !== photoId));
+        alert('Photo deleted successfully');
+    } catch (error) {
+        alert(`Error: ${error.message}`);
+    }
+};
     const handleSubmit = () => {
         const selectedTagValues = selectedTags.map(tag => tag.value);
-        const url = `https://super-duper-fortnight-7gvwxjxgjj7fr957-8787.app.github.dev/user/${id}`;
-
+        const url = `https://super-duper-fortnight-7gvwxjxgjj7fr957-8787.app.github.dev/user/${userId}`;
         const currentUserAddress = filteredUser.length > 0 ? filteredUser[0].address : '';
         const newAddress = document.getElementById("inputAddress2").value;
         const addressToSubmit = newAddress.trim() === '' ? currentUserAddress : newAddress;
-
         const formInputData = {
             email_address: document.getElementById("inputEmail4").value,
             username: document.getElementById("inputUsername").value,
@@ -89,7 +86,6 @@ function Navbar() {
             facebook_url: document.getElementById("inputFacebookProfile").value,
             instagram_url: document.getElementById("inputInstagramProfile").value
         };
-
         axios.put(url, formInputData)
             .then(response => {
                 alert("Account edited successfully.");
@@ -99,14 +95,6 @@ function Navbar() {
                 alert("Error: Unable to edit account, try again.");
             });
     };
-
-    // const handleFileUpload = async (event) => {
-    //     const file = event.target.files[0];
-    //     if (!file) return;
-    
-    //     setNewPhotos([...newPhotos, file]);
-    // };
-
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid">
@@ -121,7 +109,7 @@ function Navbar() {
                                 My profile
                             </Link>
                             <ul className="dropdown-menu">
-                                <li><Link to="profilepage" className="dropdown-item">My profile</Link></li>
+                                <li><Link to={`/profilepage/${userId}`} className="dropdown-item">My profile</Link></li>
                                 <li><Link to="" className="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal">Edit profile</Link></li>
                                 <li><Link to="" className="dropdown-item" data-bs-toggle="modal" data-bs-target="#galleryModal">Gallery</Link></li>
                                 <li><Link to="searchpage" className="dropdown-item">Start connecting</Link></li>
@@ -131,7 +119,6 @@ function Navbar() {
                         </li>
                     </ul>
                 </div>
-
                 {/* Edit Profile Modal */}
                 {filteredUser.map((user) => (
                     <div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="editModalLabel" aria-hidden="true" key={user.id}>
@@ -235,7 +222,7 @@ function Navbar() {
                                 <div className="modal-middle">
                                     <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" className="btn btn-secondary" onClick={imagePreview}>Preview photo</button>
-                                    <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={handlePhotos}>Save Changes</button>
+                                    <button type="button" className="btn btn-primary" onClick={handlePhotos}>Save Changes</button>
                                 </div>
                                 </div>
                                 <hr class="border border-danger border-2 opacity-50"></hr>
@@ -244,11 +231,15 @@ function Navbar() {
                                     <img src={imgPreview} alt="" />
                                 </div>
                                 <hr class="border border-danger border-2 opacity-50"></hr>
-                                <div className="row">
+                                <div className="row d-flex justify-content-around">
                                     <h6>Existent photos:</h6>
                                     {
                                         images.map((image)=>(
-                                            <img src={image.filepath} alt="" />
+                                            <div key={image.id} className="card mb-4 rounded-0" style={{width: "18rem"}}>
+                                                <i className="bi bi-x-square-fill" type="button" onClick={() => handleDelete(image.id)}></i>
+                                                <img className="existent-photos-gallery  mb-3 rounded-0" src={image.filepath} alt="" />
+                                                <span className="card-text" value={image.filename}></span>
+                                            </div>
                                         ))
                                     }
                                 </div>
@@ -260,5 +251,4 @@ function Navbar() {
         </nav>
     );
 }
-
 export default Navbar;

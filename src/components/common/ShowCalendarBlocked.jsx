@@ -3,7 +3,7 @@ import Calendar from 'react-calendar';
 import { format } from 'date-fns';
 import 'react-calendar/dist/Calendar.css';
 import './ShowCalendar.css';
-function ShowCalendar({ selectedDates, onConfirmDates }) {
+function ShowCalendarBlocked({ selectedDates, onConfirmDates }) {
     const [newSelectedDates, setNewSelectedDates] = useState([]);
     const [deselectedDates, setDeselectedDates] = useState([]);
     useEffect(() => {
@@ -11,34 +11,10 @@ function ShowCalendar({ selectedDates, onConfirmDates }) {
         setDeselectedDates([]);
     }, [selectedDates]);
     const formattedSelectedDates = selectedDates.map(date => format(new Date(date), "yyyy-MM-dd"));
-    const handleDateClick = (clickedDate) => {
-        const dateString = format(clickedDate, "yyyy-MM-dd");
-        if (formattedSelectedDates.includes(dateString)) {
-            // If the date is already available (green), toggle deselection
-            setDeselectedDates(prev =>
-                prev.includes(dateString)
-                    ? prev.filter(d => d !== dateString)
-                    : [...prev, dateString]
-            );
-        } else {
-            // If it's a new date (blue), toggle selection
-            setNewSelectedDates(prev =>
-                prev.includes(dateString)
-                    ? prev.filter(d => d !== dateString)
-                    : [...prev, dateString]
-            );
-        }
-    };
-    const handleSaveDates = () => {
-        onConfirmDates(newSelectedDates, deselectedDates);
-        setNewSelectedDates([]); // Clear new selections
-        setDeselectedDates([]);  // Clear deselected dates
-    };
     return (
         <div className="calendar-page-result d-flex">
             <div className="calendar-container">
                 <Calendar
-                    onClickDay={handleDateClick}
                     tileClassName={({ date }) => {
                         const dateString = format(date, "yyyy-MM-dd");
                         if (formattedSelectedDates.includes(dateString)) {
@@ -48,10 +24,10 @@ function ShowCalendar({ selectedDates, onConfirmDates }) {
                     }}
                 />
                 <div className="dates-to-confirm-container ms-4">
-                    <button className="button-78" onClick={handleSaveDates}>Save Dates</button>
+                    <button>Save Dates</button>
                 </div>
             </div>
         </div>
     );
 }
-export default ShowCalendar;
+export default ShowCalendarBlocked;
