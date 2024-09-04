@@ -77,17 +77,24 @@ const Maps = () => {
         />
         {markers.map((marker) => (
           <Marker key={marker.id} position={marker.position}>
-            <Popup className='marker-popup'>
-              <img src={marker.profile_picture} className="map-picture" alt="..."></img>
-              <Link to={`/profilepage/${marker.id}`}>
-                <button className="visit-acc-button">{marker.username}</button>
-              </Link>
-              <h6 className="marker-profile-type d-flex justify-content-center">{marker.profile_type}</h6>
+            <Popup className='marker-popup d-flex'>
+              <div className='marker-popup-top d-flex margin-0 margin-auto align-items-center justify-content-between'>
+                <img src={marker.profile_picture} className="map-picture" alt="..."></img>
+                <Link to={`/profilepage/${marker.id}`}>
+                  <button className="button-78">{marker.username}</button>
+                </Link>
+                
+              </div>
+              <hr class="hr" />
+              <div>
+                <h6 className="marker-profile-type d-flex justify-content-center">{marker.profile_type}</h6>
+              </div>
             </Popup>
           </Marker>
         ))}
-      </MapContainer>
+      </MapContainer>h
     </div>
   );
 };
+
 export default Maps;

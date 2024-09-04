@@ -7,9 +7,10 @@ import axios from "axios";
 function Navbar() {
     const { users, tags, userTags, setUserTags, id, selectedTags, setSelectedTags, formattedTags, setFormattedTags, images, setImages } = useContext(MyContext);
     const [imgPreview, setImagePreview] = useState("");
-    const filteredUser = users.filter(user => user.id == id);
     const userId = localStorage.getItem("userId")
-    console.log(userId);
+    const filteredUser = users.filter(user => user.id == Number(userId));
+
+    
     useEffect(() => {
         if (Array.isArray(tags)) {
             const formatted = tags.map(tag => ({
@@ -35,7 +36,7 @@ function Navbar() {
         setImagePreview(document.getElementById("inputFilePath").value)
     }
     const handlePhotos = () => {
-        const url = `https://super-duper-fortnight-7gvwxjxgjj7fr957-8787.app.github.dev/photos/${userId}`;
+        const url = `https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/photos/${userId}`;
         const formInputData = {
             filename: document.getElementById("inputFileName").value,
             filepath: document.getElementById("inputFilePath").value
@@ -55,7 +56,7 @@ function Navbar() {
     }
 const handleDelete = async (photoId) => {
     try {
-        const response = await fetch(`https://super-duper-fortnight-7gvwxjxgjj7fr957-8787.app.github.dev/photos/${userId}/${photoId}`, {
+        const response = await fetch(`https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/photos/${userId}/${photoId}`, {
             method: 'DELETE',
         });
         if (!response.ok) {
@@ -69,7 +70,7 @@ const handleDelete = async (photoId) => {
 };
     const handleSubmit = () => {
         const selectedTagValues = selectedTags.map(tag => tag.value);
-        const url = `https://super-duper-fortnight-7gvwxjxgjj7fr957-8787.app.github.dev/user/${userId}`;
+        const url = `https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/user/${userId}`;
         const currentUserAddress = filteredUser.length > 0 ? filteredUser[0].address : '';
         const newAddress = document.getElementById("inputAddress2").value;
         const addressToSubmit = newAddress.trim() === '' ? currentUserAddress : newAddress;
@@ -125,8 +126,10 @@ const handleDelete = async (photoId) => {
                         <div className="modal-dialog">
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <h1 className="modal-title fs-5" id="editModalLabel">Edit profile</h1>
-                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <h1 style={{ color: "white" }} className="modal-title fs-5" id="editModalLabel">Edit profile</h1>
+                                    <button style={{ color: "white" }} type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                    <i class="bi bi-x-lg"></i>
+                                    </button>
                                 </div>
                                 <div className="modal-body">
                                     <div className="row g-3">
@@ -203,8 +206,10 @@ const handleDelete = async (photoId) => {
                     <div className="modal-dialog modal-lg">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h1 className="modal-title fs-5" id="galleryModalLabel">Gallery</h1>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <h1 style={{ color: "white" }} className="modal-title fs-5" id="galleryModalLabel">Gallery</h1>
+                                <button style={{ color: "white" }} type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="bi bi-x-lg"></i>
+                                </button>
                             </div>
                             <div className="modal-body">
                                 <div className="mb-3">

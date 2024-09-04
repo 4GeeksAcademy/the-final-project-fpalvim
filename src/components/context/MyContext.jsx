@@ -18,7 +18,7 @@ export const MyProvider = ({ children }) => {
     const [profilePicture, setProfilePicture] = useState("")
     // const [profileType, setProfileType] = useState("")
     const [userTags, setUserTags] = useState([])
-    const [comments, setComments] = useState([])
+    const [reviews, setReviews] = useState([])
     const [searchQuery, setSearchQuery] = useState("")
     const [selectedTags, setSelectedTags] = useState([])
     const [formattedTags, setFormattedTags] = useState([])
@@ -37,27 +37,27 @@ export const MyProvider = ({ children }) => {
     };
     useEffect(()=>{
         const fetchUsers = async () => {
-            const response = await axios.get("https://didactic-capybara-7v7r7g6p7jx43p5wg-8787.app.github.dev/users")
+            const response = await axios.get("https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/users")
             // console.log(response.data);
             setUsers(response.data)
             console.log(response.data);
         }
         const fetchTags = async () => {
-            const response = await axios.get("https://didactic-capybara-7v7r7g6p7jx43p5wg-8787.app.github.dev/tags")
+            const response = await axios.get("https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/tags")
             const tagOptions = response.data.map(tag => (
                 tag.style_tag
             ))
             // console.log(response.data);
             setTags(tagOptions)
         }
-        const fetchComments = async () => {
-            const response = await axios.get(`https://jsonplaceholder.typicode.com/comments`)
-            // console.log(response.data);
-            setComments(response.data)
-        }
+        // const fetchComments = async () => {
+        //     const response = await axios.get(`https://jsonplaceholder.typicode.com/comments`)
+        //     // console.log(response.data);
+        //     setComments(response.data)
+        // }
         fetchUsers()
         fetchTags()
-        fetchComments()
+        // fetchComments()
     },[])
     return (
         <MyContext.Provider value={{calDate, setCalDate,
@@ -75,7 +75,7 @@ export const MyProvider = ({ children }) => {
                                     profilePicture, setProfilePicture,
                                     // profileType, setProfileType,
                                     userTags, setUserTags,
-                                    comments, setComments,
+                                    reviews, setReviews,
                                     searchQuery, setSearchQuery,
                                     selectedTags, setSelectedTags,
                                     formattedTags, setFormattedTags,

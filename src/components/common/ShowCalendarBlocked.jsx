@@ -24,7 +24,7 @@ function ShowCalendarBlocked({ selectedDates, onConfirmDates }) {
                     }}
                 />
                 <div className="dates-to-confirm-container ms-4">
-                    <button>Save Dates</button>
+                    
                 </div>
             </div>
         </div>

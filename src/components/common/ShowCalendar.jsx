@@ -35,8 +35,8 @@ function ShowCalendar({ selectedDates, onConfirmDates }) {
         setDeselectedDates([]);  // Clear deselected dates
     };
     return (
-        <div className="calendar-page-result d-flex">
-            <div className="calendar-container">
+        <div className="calendar-page-result d-flex flex-column justify-content-center align-itens-center">
+            <div className="calendar-container mb-2">
                 <Calendar
                     onClickDay={handleDateClick}
                     tileClassName={({ date }) => {
@@ -47,9 +47,9 @@ function ShowCalendar({ selectedDates, onConfirmDates }) {
                         return newSelectedDates.includes(dateString) ? "selected" : null;
                     }}
                 />
-                <div className="dates-to-confirm-container ms-4">
-                    <button className="button-78" onClick={handleSaveDates}>Save Dates</button>
-                </div>
+            </div>
+            <div className="dates-to-confirm-container">
+                <button className="button-78" onClick={handleSaveDates}>Save Dates</button>
             </div>
         </div>
     );

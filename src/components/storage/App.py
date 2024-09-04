@@ -29,9 +29,8 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 3600
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+
 @app.after_request
 def refresh_expiring_jwts(response):
     try:
@@ -47,10 +46,12 @@ def refresh_expiring_jwts(response):
         return response
     except (RuntimeError, KeyError):
         return response
+
 user_tags = db.Table('user_tags',
     db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), primary_key=True),
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
 )
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     email_address = db.Column(db.String(255), nullable = False)
@@ -83,11 +84,18 @@ class User(db.Model):
             "youtube_url" : self.youtube_url,
             "facebook_url" : self.facebook_url,
             "instagram_url" : self.instagram_url,
-            "user_tags" : self.user_tags
+            
         }
+
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     style_tag = db.Column(db.String(255), nullable = False)
+    def serialize(self):
+        return {
+            "id": self.id,
+            "style_tag": self.style_tag
+        }
+
 class UserAvailability(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -107,17 +115,20 @@ class Media(db.Model):
     filename = db.Column(db.String(255), nullable=False)
     filepath = db.Column(db.String(30000), nullable=False)
     user = db.relationship('User', backref=db.backref('media', lazy=True))
+
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    reviewer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    reviewee_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # comment_id = db.Column(db.Integer, nullable=False)
+    comment = db.Column(db.Text, nullable=False)
+
+    reviewer = db.relationship('User', foreign_keys=[reviewer_id])
+    reviewee = db.relationship('User', foreign_keys=[reviewee_id])
+
 with app.app_context():
     db.create_all()
-# @app.route("/token", methods=["POST"])
-# def create_token():
-#     username = request.json.get("username", None)
-#     password = request.json.get("password", None)
-#     user = User.query.filter_by(username=username).first()
-#     if user is None or not check_password_hash(user.password, password):
-#         return jsonify({"msg": "Bad username or password"}), 401
-#     access_token = create_access_token(identity=username)
-#     return jsonify(access_token=access_token)
+
 @app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
@@ -128,11 +139,13 @@ def login():
         return jsonify({"message": "Invalid username or password"})
     access_token = create_access_token(identity=user_db.username)
     return jsonify({"access_token": access_token, "user_db": user_db.serialize()}), 200
+
 @app.route("/protected", methods=["GET"])
 @jwt_required()
 def protected():
     current_user = get_jwt_identity()
     return jsonify(message= f'Hello, {current_user}, this is a protected route.')
+
 @app.route('/tag', methods=['POST'])
 def create_style_tag():
     data = request.get_json()
@@ -142,6 +155,7 @@ def create_style_tag():
     db.session.add(new_style_tag)
     db.session.commit()
     return jsonify({"message":"Tag created", "data":data}), 201
+
 @app.route('/user', methods=['POST'])
 def create_user():
     data = request.get_json()
@@ -167,6 +181,7 @@ def create_user():
     db.session.add(new_user)
     db.session.commit()
     return jsonify({"message": "User created", "data": data}), 201
+
 @app.route('/photos/<int:user_id>', methods=['POST'])
 def add_photo(user_id):
     data = request.get_json(user_id)
@@ -180,12 +195,32 @@ def add_photo(user_id):
     db.session.commit()
     return jsonify({"message":"Photo uploaded", "data":data}), 201
 
+@app.route('/reviews', methods=['POST'])
+def post_review():
+    data = request.get_json()
+    reviewer_id = data.get('reviewer_id')
+    reviewee_id = data.get('reviewee_id')
+    # comment_id = data.get('comment_id')
+    comment = data.get('comment')
+
+    new_review = Review(
+        reviewer_id=reviewer_id,
+        reviewee_id=reviewee_id,
+        # comment_id=comment_id,
+        comment=comment
+    )
+    db.session.add(new_review)
+    db.session.commit()
+    
+    return jsonify({'message': 'Review posted successfully!'}), 201
+
 @app.route('/tags', methods=['GET'])
 def tags():
     tag = Tag.query.all()
     return jsonify([{
         'style_tag': tag.style_tag
     } for tag in tag])
+
 @app.route('/user_tags', methods=['GET'])
 def get_tags():
     users_tags = db.session.query(user_tags).all()
@@ -193,6 +228,7 @@ def get_tags():
         'user_id': users_tags.user_id,
         'tag_id': users_tags.tag_id,
     } for users_tags in users_tags])
+
 @app.route('/user/<int:user_id>/tags', methods=['GET'])
 def get_user_tags(user_id):
     try:
@@ -204,6 +240,7 @@ def get_user_tags(user_id):
     except Exception as e:
         print(f'error fetching tags: {e}')
         return jsonify({"error": "Internal server error"})
+
 @app.route('/users', methods=['GET'])
 def users():
     user = User.query.all()
@@ -222,6 +259,7 @@ def users():
         'facebook_url': user.facebook_url,
         'instagram_url': user.instagram_url
     } for user in user])
+
 @app.route('/dates/availability/<int:user_id>', methods=['GET'])
 def get_user_availability(user_id):
     try:
@@ -230,6 +268,7 @@ def get_user_availability(user_id):
         return jsonify(availability_list)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 @app.route('/user/<int:user_id>/photos', methods=['GET'])
 def get_photos(user_id):
     photos = Media.query.filter_by(user_id=user_id).all()
@@ -238,6 +277,22 @@ def get_photos(user_id):
         'filename': photos.filename,
         'filepath': photos.filepath
     } for photos in photos])
+
+
+@app.route('/reviews', methods=['GET'])
+def get_reviews():
+    reviews = Review.query.all()
+    result = []
+    for review in reviews:
+        result.append({
+            'id': review.id,
+            'reviewer_id': review.reviewer_id,
+            'reviewee_id': review.reviewee_id,
+            # 'comment_id': review.comment_id,
+            'comment': review.comment
+        })
+    return jsonify(result)
+
 @app.route("/user/<id>", methods=["PUT"])
 def band_update(id):
     user = User.query.get(id)
@@ -290,6 +345,7 @@ def band_update(id):
     db.session.commit()
     return jsonify({"message":"User updated", "data":response_body}), 201
 @app.route('/dates/availability/<int:user_id>', methods=['PUT'])
+
 def save_user_availability(user_id):
     try:
         data = request.json
