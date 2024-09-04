@@ -30,7 +30,7 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
-]
+
 @app.after_request
 def refresh_expiring_jwts(response):
     try:
@@ -120,7 +120,7 @@ class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     reviewer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     reviewee_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    comment_id = db.Column(db.Integer, nullable=False)
+    # comment_id = db.Column(db.Integer, nullable=False)
     comment = db.Column(db.Text, nullable=False)
 
     reviewer = db.relationship('User', foreign_keys=[reviewer_id])
@@ -128,15 +128,7 @@ class Review(db.Model):
 
 with app.app_context():
     db.create_all()
-# @app.route("/token", methods=["POST"])
-# def create_token():
-#     username = request.json.get("username", None)
-#     password = request.json.get("password", None)
-#     user = User.query.filter_by(username=username).first()
-#     if user is None or not check_password_hash(user.password, password):
-#         return jsonify({"msg": "Bad username or password"}), 401
-#     access_token = create_access_token(identity=username)
-#     return jsonify(access_token=access_token)
+
 @app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
@@ -208,13 +200,13 @@ def post_review():
     data = request.get_json()
     reviewer_id = data.get('reviewer_id')
     reviewee_id = data.get('reviewee_id')
-    comment_id = data.get('comment_id')
+    # comment_id = data.get('comment_id')
     comment = data.get('comment')
 
     new_review = Review(
         reviewer_id=reviewer_id,
         reviewee_id=reviewee_id,
-        comment_id=comment_id,
+        # comment_id=comment_id,
         comment=comment
     )
     db.session.add(new_review)
@@ -296,7 +288,7 @@ def get_reviews():
             'id': review.id,
             'reviewer_id': review.reviewer_id,
             'reviewee_id': review.reviewee_id,
-            'comment_id': review.comment_id,
+            # 'comment_id': review.comment_id,
             'comment': review.comment
         })
     return jsonify(result)

@@ -18,7 +18,7 @@ export const MyProvider = ({ children }) => {
     const [profilePicture, setProfilePicture] = useState("")
     // const [profileType, setProfileType] = useState("")
     const [userTags, setUserTags] = useState([])
-    const [comments, setComments] = useState([])
+    const [reviews, setReviews] = useState([])
     const [searchQuery, setSearchQuery] = useState("")
     const [selectedTags, setSelectedTags] = useState([])
     const [formattedTags, setFormattedTags] = useState([])
@@ -50,14 +50,14 @@ export const MyProvider = ({ children }) => {
             // console.log(response.data);
             setTags(tagOptions)
         }
-        const fetchComments = async () => {
-            const response = await axios.get(`https://jsonplaceholder.typicode.com/comments`)
-            // console.log(response.data);
-            setComments(response.data)
-        }
+        // const fetchComments = async () => {
+        //     const response = await axios.get(`https://jsonplaceholder.typicode.com/comments`)
+        //     // console.log(response.data);
+        //     setComments(response.data)
+        // }
         fetchUsers()
         fetchTags()
-        fetchComments()
+        // fetchComments()
     },[])
     return (
         <MyContext.Provider value={{calDate, setCalDate,
@@ -75,7 +75,7 @@ export const MyProvider = ({ children }) => {
                                     profilePicture, setProfilePicture,
                                     // profileType, setProfileType,
                                     userTags, setUserTags,
-                                    comments, setComments,
+                                    reviews, setReviews,
                                     searchQuery, setSearchQuery,
                                     selectedTags, setSelectedTags,
                                     formattedTags, setFormattedTags,

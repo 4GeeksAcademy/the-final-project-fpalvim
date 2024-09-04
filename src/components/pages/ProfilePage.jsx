@@ -8,12 +8,12 @@ import { Link } from "react-router-dom";
 import ShowCalendarBlocked from "../common/ShowCalendarBlocked";
 
 function ProfilePage() {
-  const { users, comments, setComments, userTags, setUserTags, images, setImages, userData } = useContext(MyContext);
+  const { users, reviews, setReviews, userTags, setUserTags, images, setImages, userData } = useContext(MyContext);
   const { id } = useParams()
-  const [currentComment, setCurrentComment] = useState(null);
+  const [currentReview, setCurrentReview] = useState(null);
   const [availabilityDates, setAvailabilityDates] = useState([]);
   const [selectedDates, setSelectedDates] = useState([]);
-  const [newComment, setNewComment] = useState('');
+  const [newReview, setNewReview] = useState('');
   const navigate = useNavigate();
   const user = users.find(user => user.id === Number(id));
   const spotifyLinkFromDb = users.find(user => user.id == id)?.spotify_url
@@ -21,7 +21,23 @@ function ProfilePage() {
   const [currentImage, setCurrentImage] = useState(0);
   const [selectedDateToSendMessage, setSelectedDateToSendMessage] = useState('');
   const [message, setMessage] = useState('');
+  const inputReviewerId = localStorage.getItem("userId")
+  const [showReviewForm, setShowReviewForm] = useState(false);
 
+  useEffect(() => {
+    axios.get('/reviews')
+      .then(response => {
+        const userReviews = response.data.filter(review => review.reviewee_id === Number(id));
+        console.log(userReviews.data);
+        console.log(response.data);
+        
+        
+        setReviews(userReviews);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the reviews!', error);
+      });
+  }, [id, setReviews]);
 
   const getMailtoLink = () => { 
     const email = users.find(user=> user.id == Number(id))?.email_address
@@ -51,8 +67,11 @@ function ProfilePage() {
             const fetchedDates = response.data.map(date => format(new Date(date.date), 'yyyy-MM-dd'));
             setAvailabilityDates(fetchedDates);
             setSelectedDates(fetchedDates);
-            const commentResponse = await axios.get('https://jsonplaceholder.typicode.com/comments');
-            setComments(commentResponse.data);
+            const reviewsResponse = await axios.get('https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/reviews');            
+            const userReviews = reviewsResponse.data.filter(review => review.reviewee_id === Number(id));
+            setReviews(userReviews);
+            console.log(reviewsResponse.data);
+            
         } catch (error) {
             console.error('Error fetching profile data:', error);
         }
@@ -79,18 +98,18 @@ useEffect(() => {
 
 
    useEffect(() => {
-      const randomComment = () => {
-          const randomIndex = Math.floor(Math.random() * comments.length);
-          setCurrentComment(comments[randomIndex]);
+      const randomReview = () => {
+          const randomIndex = Math.floor(Math.random() * reviews.length);
+          setCurrentReview(reviews[randomIndex]);
       };
       const time = setInterval(() => {
-          randomComment();
-      }, 5000);
+          randomReview();
+      }, 2000);
 
-      randomComment();
+      randomReview();
 
       return () => clearInterval(time);
-  }, [comments]);
+  }, [reviews]);
 
   const handleConfirmDates = (newDates = [], removeDates = []) => {
     const formattedNewDates = newDates.map(date => format(new Date(date), 'yyyy-MM-dd'));
@@ -113,30 +132,41 @@ useEffect(() => {
 };
 
 
-  const handleCommentChange = (event) => {
-      setNewComment(event.target.value);
-  };
+const handleReviewChange = (event) => {
+  setNewReview(event.target.value);
+};
 
-  const handleSubmit = () => {
-      if (!newComment.trim()) {
-          alert("Comment cannot be empty!");
-          return;
-      }
+const handleSubmitReview = () => {
+  if (!newReview.trim()) {
+    alert("Review cannot be empty!");
+    return;
+  }
 
-      axios.post('https://jsonplaceholder.typicode.com/comments', {
-          postId: id,
-          name: 'New Commenter',
-          email: 'newcommenter@example.com',
-          body: newComment
-      })
-      .then(() => {
-          setNewComment('');
-          alert("Comment added successfully!");
-      })
-      .catch(() => {
-          alert("Error: Unable to add comment, try again.");
-      });
-  };
+
+
+  axios.post('https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/reviews', {
+    reviewer_id: inputReviewerId,
+    reviewee_id: id,  
+    comment: newReview
+  })
+  .then(response => {
+    setNewReview(''); 
+    setShowReviewForm(false); // Hide the form after submission
+    alert("Review added successfully!");
+    setReviews(prevReviews => [...prevReviews, response.data]);
+  })
+  // .then(response => {
+  //   setNewReview(''); 
+  //   alert("Review added successfully!");
+    
+    
+  //   setReviews(prevReviews => [...prevReviews, response.data]);
+  // })
+  .catch(error => {
+    console.error('Error posting the review:', error);
+    alert("Error: Unable to add review, try again.");
+  });
+};
 
   return (
     <div id="profile-container" className="text-center">
@@ -230,15 +260,15 @@ useEffect(() => {
                 </div>
               </div>
             </div>
-            <div className="botdiv-middle ">
+            <div className="botdiv-middle d-flex flex-column">
             <h1>socials</h1>
-            <div className="">
+            <div className="social-media-icons d-flex justify-content-center align-content-center m-0 w-100">
               {users.map((user)=> user.id == id ? (
-                <div key={user.id}>
-                <Link target="_blank" to={user.spotify_url}><i id="spotify-icon" className="bi bi-spotify"></i></Link>
-                <Link target="_blank" to={user.youtube_url}><i id="youtube-icon" className="bi bi-youtube"></i></Link>
-                <Link target="_blank" to={user.facebook_url}><i id="facebook-icon" className="bi bi-facebook"></i></Link>
-                <Link target="_blank" to={user.instagram_url}><i id="instagram-icon" className="bi bi-instagram"></i></Link>
+                <div className="social-icons d-flex justify-content-between w-75 m-0" key={user.id}>
+                <Link target="_blank" to={user.spotify_url}><i id="spotify-icon" className="bi bi-spotify display-6 bg-white"></i></Link>
+                <Link target="_blank" to={user.youtube_url}><i id="youtube-icon" className="bi bi-youtube display-6"></i></Link>
+                <Link target="_blank" to={user.facebook_url}><i id="facebook-icon" className="bi bi-facebook display-6"></i></Link>
+                <Link target="_blank" to={user.instagram_url}><i id="instagram-icon" className="bi bi-instagram display-6"></i></Link>
                 </div>
               ) : null)}
             </div>
@@ -326,15 +356,64 @@ useEffect(() => {
           <div className="middiv-right">
             <h1>reviews</h1>
             <div>
-                        {currentComment ? (
-                            <div key={currentComment.id}>
-                                <p><strong>{currentComment.name}</strong></p>
-                                <p>{currentComment.body}</p>
+                {showReviewForm ? (
+                  <>
+                    <textarea
+                      value={newReview}
+                      onChange={handleReviewChange}
+                      placeholder="Write your review here..."
+                      rows="4"
+                      cols="50"
+                    />
+                    <div>
+                      <button onClick={handleSubmitReview}>Submit Review</button>
+                      <button onClick={() => setShowReviewForm(false)}>Cancel</button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <ul className="review-list">
+                      {currentReview ? (
+                        <li key={currentReview.id} className="review-item">
+                          {currentReview.comment}
+                        </li>
+                      ):null}
+                    </ul>
+                    <button onClick={() => setShowReviewForm(true)}>
+                      Add a Review
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+        
+            {/* <div>
+                        {currentReview ? (
+                            <div key={currentReview.id}>
+                                <p>Reviewer: <strong>{currentReview.reviewer_id}</strong></p>
+                                <p>{currentReview.comment}</p>
                             </div>
                         ) : null}
                     </div>
           </div>
-         
+          <div className="middiv-right">
+            <h5>Write a review here</h5>
+            <div>
+            <textarea
+                value={newReview}
+                onChange={handleReviewChange}
+                placeholder="Write your review here..."
+                rows="4"
+                className="form-control"
+              />
+              <button
+                onClick={handleSubmitReview}
+                className="btn btn-primary mt-2"
+              >
+                Submit Review
+              </button>
+            </div>
+          </div> */}
           <div className="botdiv-right">
           <h1>contact info</h1>
               {users.map((user) =>

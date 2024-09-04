@@ -9,7 +9,8 @@ function Navbar() {
     const [imgPreview, setImagePreview] = useState("");
     const userId = localStorage.getItem("userId")
     const filteredUser = users.filter(user => user.id == Number(userId));
-    console.log(userId);
+
+    
     useEffect(() => {
         if (Array.isArray(tags)) {
             const formatted = tags.map(tag => ({

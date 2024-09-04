@@ -104,7 +104,7 @@ function LoginPage() {
   document.addEventListener("mousemove", handleMouseMove)
 
   return (
-    
+  
     <div className="login-page-container">
       <div className="center-content-container">
         <div className="content-container">
