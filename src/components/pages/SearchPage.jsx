@@ -1,53 +1,79 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../context/MyContext";
 import { Link } from "react-router-dom";
 import Maps from "../common/Maps";
+import axios from "axios";
 
 function SearchPage() {
-
-    const {users, setUsers} = useContext(MyContext)
-    const loggedInProfile = "band"
+    const { comments, setComments, userTags, setUserTags, images, userData } = useContext(MyContext);
+    const {users, searchQuery, setSearchQuery} = useContext(MyContext)
+    const loggedInProfile = userData.profile_type
     const filteredUsers = users.filter((user) => user.profile_type !== loggedInProfile)
-    
+    const queryProfile = filteredUsers.filter((profile) => profile.username.toLowerCase().includes(searchQuery.toLowerCase()));
+    const id = localStorage.getItem("userId")
+    const user = users.find(user => user.id === Number(id));
+    const handleSearch = (e) => {
+        const searchWord = e.target.value
+        setSearchQuery(searchWord)
+    }
+    const fetchUserTagsById = async () => {
+        const response = await axios.get(`https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/user/${id}/tags`)
+        // console.log(response.data);
+        setUserTags(response.data)
+        console.log(userTags, response.data)
+      }
+    useEffect(()=>{
+       
+    },[])
     return ( 
         <div className="search-page-container">
             <div className="search-bar p-3 d-flex align-items-center">
-                <input className="search-bar-input w-75" type="text" placeholder="What are you looking for?"></input>
-                <button><i className="bi bi-search"></i></button>
+                <input className="search-bar-input w-75" id="searchBar" value={searchQuery} onChange={(e)=>handleSearch(e)} type="text" placeholder="Who are you looking for?"></input>
             </div>
-            <div className="date-select p-3">
-                <p>maybe a dropdown calendar here to filter by date</p>
-            </div>
-            <div>
-                <div className="search-page-filters p-3 d-flex flex-column justify-content-between">
-                    <label for="by-distance" className="form-label">By distance</label>
-                        <select className="form-select w-45" name="" id="by-distance"></select>
-                    <label for="by-tags" className="form-label">By tags</label>
-                        <select className="form-select w-45" name="" id="by-tags"></select>
-                </div>
-            </div>
-            <div className="search-page-middle-wrapper row p-3">
-                <div className="search-page-middle-left-side col-lg-6 col-md-6 col-sm-12 ">
-                    {filteredUsers.map((filteredUser)=>(
-                    <div key={filteredUser.id} className="card my-2" style={{ width: "18rem" }}>
+        
+            <div className="search-page-middle-wrapper  auto p-3">
+            <Maps/>
+                <div className="search-page-middle-left-side">
+                
+                    {queryProfile.map((filteredUser)=>(
+                        <div className="card-holder col auto mb-5" style={{zIndex: 4, position:"relative", top:"-150px", left:"50px"}}>
+                    <div key={filteredUser.id} className="card " style={{width: "300px", height:"450px",}}>
                         <img src={filteredUser.profile_picture} className="card-img-top" alt="..."></img>
                         <h5 className="band-title p-2">{filteredUser.username} </h5>
+                        <div className="cardTop d-flex justify-content-center">
+                        <div className="dropdown">
+  <button onClick={fetchUserTagsById} className="button-78 dropdown-toggle" role="button" type="button" data-bs-toggle="dropdown" aria-expanded="false">genres</button>
+  <ul className="dropdown-menu">
+    
+ 
+  </ul>
+</div>
+<Link type="button" to={`/profilepage/${filteredUser.id}`}><button className="button-78">visit account</button></Link>
+</div>
                         <div className="card-body ">
                             <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <Link type="button" to={`/profilepage/${filteredUser.id}`}><button className="visit-acc-button">visit account</button></Link>
+                           
                         </div>
                     </div> 
+                    </div>
                      ))}
                 </div>
-                <div className="search-page-middle-right-side col-lg-5 col-md-5 col-sm-11  mx-3 p-2">
-                    <Maps/>
+                
+                    <div className=" text-center">
+                        <h1 className="">hellp</h1>
+                        
+                    
                 </div>
             </div>
+            <br />
+            <br />
+            <br />
+            <br />
             <div className="nav justify-content-center">
-                    <button type="button" className="btn btn-link" onClick={() => navigate('/FaqsPage')}>FAQS</button>
-                    <button type="button" className="btn btn-link" onClick={() => navigate('/FaqsPage')}>about us</button>
-                    <button type="button" className="btn btn-link" onClick={() => navigate('/FaqsPage')}>contact</button>
-                </div>
+                <Link to={`/faqspage`} type="button" className="btn btn-link">FAQS</Link>
+                <button type="button" className="btn btn-link" onClick={() => navigate('/FaqsPage')}>about us</button>
+                <button type="button" className="btn btn-link" onClick={() => navigate('/FaqsPage')}>contact</button>
+            </div>
         </div>
      );
 }

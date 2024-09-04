@@ -1,96 +1,254 @@
-import {Link} from "react-router-dom"
-
-
+import { useContext, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { MyContext } from "../context/MyContext";
+import MapSearchBar from "./MapSearchBar";
+import Select from "react-select";
+import axios from "axios";
 function Navbar() {
-
-    return ( 
-
-       
-
-        
+    const { users, tags, userTags, setUserTags, id, selectedTags, setSelectedTags, formattedTags, setFormattedTags, images, setImages } = useContext(MyContext);
+    const [imgPreview, setImagePreview] = useState("");
+    const userId = localStorage.getItem("userId")
+    const filteredUser = users.filter(user => user.id == Number(userId));
+    console.log(userId);
+    useEffect(() => {
+        if (Array.isArray(tags)) {
+            const formatted = tags.map(tag => ({
+                value: tag,
+                label: tag.charAt(0).toUpperCase() + tag.slice(1)
+            }));
+            setFormattedTags(formatted);
+            if (userTags.length > 0) {
+                const initialSelectedTags = userTags.map(utag => {
+                    const matchingTag = formatted.find(tag => tag.value === utag);
+                    return matchingTag || { value: utag, label: utag };
+                });
+                setSelectedTags(initialSelectedTags);
+            }
+        } else {
+            console.error("Expected 'tags' to be an array, but got:", typeof tags);
+        }
+    }, [tags, userTags]);
+    const handleChange = (selectedOptions) => {
+        setSelectedTags(selectedOptions || []);
+    }
+    function imagePreview(e){
+        setImagePreview(document.getElementById("inputFilePath").value)
+    }
+    const handlePhotos = () => {
+        const url = `https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/photos/${userId}`;
+        const formInputData = {
+            filename: document.getElementById("inputFileName").value,
+            filepath: document.getElementById("inputFilePath").value
+        }
+        axios.post(url, formInputData)
+            .then(response => {
+                alert("Photo uploaded successfully.");
+                const updatePhotos = response.data.data;
+                setImages(prevPhotos => [...prevPhotos, updatePhotos]);
+                setImagePreview("")
+                document.getElementById("inputFilePath").value = '';
+            })
+            .catch(error => {
+                console.error("Error:", error.response ? error.response.data : error.message);
+                alert("Error: Unable to upload photo, try again.");
+            });
+    }
+const handleDelete = async (photoId) => {
+    try {
+        const response = await fetch(`https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/photos/${userId}/${photoId}`, {
+            method: 'DELETE',
+        });
+        if (!response.ok) {
+            throw new Error('Failed to delete photo');
+        }
+        setImages(images.filter(image => image.id !== photoId));
+        alert('Photo deleted successfully');
+    } catch (error) {
+        alert(`Error: ${error.message}`);
+    }
+};
+    const handleSubmit = () => {
+        const selectedTagValues = selectedTags.map(tag => tag.value);
+        const url = `https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/user/${userId}`;
+        const currentUserAddress = filteredUser.length > 0 ? filteredUser[0].address : '';
+        const newAddress = document.getElementById("inputAddress2").value;
+        const addressToSubmit = newAddress.trim() === '' ? currentUserAddress : newAddress;
+        const formInputData = {
+            email_address: document.getElementById("inputEmail4").value,
+            username: document.getElementById("inputUsername").value,
+            profile_picture: document.getElementById("inputProfilePicture").value,
+            description: document.getElementById("inputDescription").value,
+            tags: selectedTagValues,
+            phone_number: document.getElementById("inputPhoneNumber").value,
+            address: addressToSubmit,
+            spotify_url: document.getElementById("inputSpotifyProfile").value,
+            youtube_url: document.getElementById("inputYoutubeProfile").value,
+            facebook_url: document.getElementById("inputFacebookProfile").value,
+            instagram_url: document.getElementById("inputInstagramProfile").value
+        };
+        axios.put(url, formInputData)
+            .then(response => {
+                alert("Account edited successfully.");
+            })
+            .catch(error => {
+                console.error("Error:", error.response ? error.response.data : error.message);
+                alert("Error: Unable to edit account, try again.");
+            });
+    };
+    return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
-
             <div className="container-fluid">
                 <Link to="#" className="navbar-brand"><i className="bi bi-music-note-beamed fs-2"></i></Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
+                    <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li className="nav-item dropdown">
-                    <Link to="#" className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        My profile
-                    </Link>
-                    <ul className="dropdown-menu">
-                        <li><Link to="profilepage" className="dropdown-item">My profile</Link></li>
-                        <li><Link to="" className="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal">Edit profile</Link></li>
-                        <li><Link to="searchpage" className="dropdown-item">start connecting</Link></li>
-                        <li><hr className="dropdown-divider"></hr></li>
-                        <li><Link to="loginpage" className="dropdown-item">Log out</Link></li>
+                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li className="nav-item dropdown">
+                            <Link to="#" className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                My profile
+                            </Link>
+                            <ul className="dropdown-menu">
+                                <li><Link to={`/profilepage/${userId}`} className="dropdown-item">My profile</Link></li>
+                                <li><Link to="" className="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal">Edit profile</Link></li>
+                                <li><Link to="" className="dropdown-item" data-bs-toggle="modal" data-bs-target="#galleryModal">Gallery</Link></li>
+                                <li><Link to="searchpage" className="dropdown-item">Start connecting</Link></li>
+                                <li><hr className="dropdown-divider"></hr></li>
+                                <li><Link to="loginpage" className="dropdown-item">Log out</Link></li>
+                            </ul>
+                        </li>
                     </ul>
-                    </li>
-                </ul>
                 </div>
-                <div className="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                {/* Edit Profile Modal */}
+                {filteredUser.map((user) => (
+                    <div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="editModalLabel" aria-hidden="true" key={user.id}>
                         <div className="modal-dialog">
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <h1 className="modal-title fs-5" id="exampleModalLabel">Sign up</h1>
+                                    <h1 className="modal-title fs-5" id="editModalLabel">Edit profile</h1>
                                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                            <div className="modal-body">
-                                <div className="row g-3">
-                                    <div className="col-md-6">
-                                        <label for="inputEmail4" className="form-label">Email</label>
-                                        <input type="email" className="form-control" id="inputEmail4"></input>
-                                    </div>
-                                    <div className="col-md-6">
-                                        <label for="inputPassword4" className="form-label">Password</label>
-                                        <input type="password" className="form-control" id="inputPassword4"></input>
-                                    </div>
-                                    <div className="col-12">
-                                        <label for="inputAddress" className="form-label">User Name</label>
-                                        <input type="text" className="form-control" id="inputAddress" placeholder="The Three Musketeers"></input>
-                                    </div>
-                                    <div className="col-12">
-                                        <label for="inputAddress2" className="form-label">Address</label>
-                                        <input type="text" className="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor"></input>
-                                    </div>
-                                    <div className="col-md-6">
-                                        <label for="inputCity" className="form-label">Country</label>
-                                        <input type="text" className="form-control" id="inputCity"></input>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <label for="inputState" className="form-label">City</label>
-                                        <select id="inputState" className="form-select">
-                                        <option selected>Choose...</option>
-                                        <option>...</option>
-                                        </select>
-                                    </div>
-                                    <div className="col-md-2">
-                                        <label for="inputZip" className="form-label">Zip</label>
-                                        <input type="text" className="form-control" id="inputZip"></input>
-                                    </div>
-                                    <div className="col-12">
-                                        <div className="form-check">
-                                            <input className="form-check-input" type="checkbox" id="gridCheck"></input>
-                                            <label className="form-check-label" for="gridCheck">
-                                                Keep me logged in
-                                            </label>
+                                <div className="modal-body">
+                                    <div className="row g-3">
+                                        <div className="col-md-6">
+                                            <label htmlFor="inputEmail4" className="form-label">Email</label>
+                                            <input type="email" defaultValue={user.email_address} className="form-control" id="inputEmail4"></input>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <label htmlFor="inputPassword4" className="form-label">Password</label>
+                                            <input type="password" className="form-control" id="inputPassword4"></input>
+                                        </div>
+                                        <div className="col-12">
+                                            <label htmlFor="inputUsername" className="form-label">Band or Venue Name</label>
+                                            <input type="text" className="form-control" defaultValue={user.username} id="inputUsername" placeholder="The Three Musketeers"></input>
+                                        </div>
+                                        <div className="col-12">
+                                            <label htmlFor="inputProfilePicture" className="form-label">URL of the profile picture</label>
+                                            <input type="text" className="form-control" defaultValue={user.profile_picture} id="inputProfilePicture" placeholder="E.g. https://www.instagram.com/metallica/?hl=en"></input>
+                                        </div>
+                                        <div className="col-12">
+                                            <label htmlFor="inputSpotifyProfile" className="form-label">Spotify</label>
+                                            <input type="text" className="form-control" defaultValue={user.spotify_url} id="inputSpotifyProfile" placeholder="Paste the url of your profile here"></input>
+                                        </div>
+                                        <div className="col-12">
+                                            <label htmlFor="inputYoutubeProfile" className="form-label">Youtube</label>
+                                            <input type="text" className="form-control" defaultValue={user.youtube_url} id="inputYoutubeProfile" placeholder="Paste the url of your profile here"></input>
+                                        </div>
+                                        <div className="col-12">
+                                            <label htmlFor="inputFacebookProfile" className="form-label">Facebook</label>
+                                            <input type="text" className="form-control" defaultValue={user.facebook_url} id="inputFacebookProfile" placeholder="Paste the url of your profile here"></input>
+                                        </div>
+                                        <div className="col-12">
+                                            <label htmlFor="inputInstagramProfile" className="form-label">Instagram</label>
+                                            <input type="text" className="form-control" defaultValue={user.instagram_url} id="inputInstagramProfile" placeholder="Paste the url of your profile here"></input>
+                                        </div>
+                                        <div className="input-group">
+                                            <span className="input-group-text">Description</span>
+                                            <textarea className="form-control" aria-label="With textarea" defaultValue={user.description} id="inputDescription" placeholder="Description goes here. Be creative..."></textarea>
+                                        </div>
+                                        <div className="edit-profile-checkboxes d-flex">
+                                            <Select
+                                                isMulti
+                                                options={formattedTags}
+                                                value={selectedTags}
+                                                onChange={handleChange}
+                                                placeholder="Select multiple options"
+                                                id="selectTagsInfo"
+                                            />
+                                        </div>
+                                        <div className="col-12">
+                                            <div className="container-current-address border border-solid border-3 border-gray px-2 rounded">
+                                                <p className="navbar-current-address-title mb-0"><small><strong>Your current address:</strong></small></p>
+                                                <p><small>{user.address}</small></p>
+                                            </div>
+                                            <label htmlFor="inputAddress2" className="form-label">Address</label>
+                                            <MapSearchBar />
+                                        </div>
+                                        <div className="col-12">
+                                            <label htmlFor="inputPhoneNumber" className="form-label">Phone Number</label>
+                                            <input type="text" className="form-control" defaultValue={user.phone_number} id="inputPhoneNumber" placeholder="888-333-0000"></input>
+                                        </div>
+                                        <div className="col-12">
+                                            <button type="submit" className="btn btn-primary" data-bs-dismiss="modal" onClick={handleSubmit}>Save changes</button>
                                         </div>
                                     </div>
-                                    <div className="col-12">
-                                        <button  type="button" className="edit-button" onClick={() => navigate('/profilepage/:id')}>Save Changes</button>
-                                    </div>
                                 </div>
-                            </div>
                                 <div className="modal-footer"></div>
                             </div>
                         </div>
                     </div>
+                ))}
+{/* GALLERY MODAL */}
+                <div className="modal fade" id="galleryModal" tabIndex="-1" aria-labelledby="galleryModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-lg">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h1 className="modal-title fs-5" id="galleryModalLabel">Gallery</h1>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                                <div className="mb-3">
+                                <div className="input-group">
+                                    <span className="input-group-text">Image URL</span>
+                                    <input className="form-control" aria-label="With textarea" id="inputFilePath"></input>
+                                </div>
+                                </div>
+                                <div className="mb-3">
+                                <div className="input-group mb-2">
+                                    <span className="input-group-text">Image title</span>
+                                    <input className="form-control" aria-label="With textarea" id="inputFileName" placeholder="Give a title to your image if you want"></input>
+                                </div>
+                                <hr class="border border-danger border-2 opacity-50"></hr>
+                                <div className="modal-middle">
+                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" className="btn btn-secondary" onClick={imagePreview}>Preview photo</button>
+                                    <button type="button" className="btn btn-primary" onClick={handlePhotos}>Save Changes</button>
+                                </div>
+                                </div>
+                                <hr class="border border-danger border-2 opacity-50"></hr>
+                                <div>
+                                    <h6>Preview photo:</h6>
+                                    <img src={imgPreview} alt="" />
+                                </div>
+                                <hr class="border border-danger border-2 opacity-50"></hr>
+                                <div className="row d-flex justify-content-around">
+                                    <h6>Existent photos:</h6>
+                                    {
+                                        images.map((image)=>(
+                                            <div key={image.id} className="card mb-4 rounded-0" style={{width: "18rem"}}>
+                                                <i className="bi bi-x-square-fill" type="button" onClick={() => handleDelete(image.id)}></i>
+                                                <img className="existent-photos-gallery  mb-3 rounded-0" src={image.filepath} alt="" />
+                                                <span className="card-text" value={image.filename}></span>
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </nav>
-     );
+    );
 }
-
 export default Navbar;
