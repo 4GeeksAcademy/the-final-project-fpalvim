@@ -1,14 +1,16 @@
 import { useContext, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { MyContext } from "../context/MyContext";
 import MapSearchBar from "./MapSearchBar";
 import Select from "react-select";
 import axios from "axios";
+
 function Navbar() {
-    const { users, tags, userTags, setUserTags, id, selectedTags, setSelectedTags, formattedTags, setFormattedTags, images, setImages } = useContext(MyContext);
+    const { users, tags, userTags, selectedTags, setSelectedTags, formattedTags, setFormattedTags, images, setImages } = useContext(MyContext);
     const [imgPreview, setImagePreview] = useState("");
     const userId = localStorage.getItem("userId")
     const filteredUser = users.filter(user => user.id == Number(userId));
+    const navigate = useNavigate()
 
     
     useEffect(() => {
@@ -68,34 +70,43 @@ const handleDelete = async (photoId) => {
         alert(`Error: ${error.message}`);
     }
 };
-    const handleSubmit = () => {
-        const selectedTagValues = selectedTags.map(tag => tag.value);
-        const url = `https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/user/${userId}`;
-        const currentUserAddress = filteredUser.length > 0 ? filteredUser[0].address : '';
-        const newAddress = document.getElementById("inputAddress2").value;
-        const addressToSubmit = newAddress.trim() === '' ? currentUserAddress : newAddress;
-        const formInputData = {
-            email_address: document.getElementById("inputEmail4").value,
-            username: document.getElementById("inputUsername").value,
-            profile_picture: document.getElementById("inputProfilePicture").value,
-            description: document.getElementById("inputDescription").value,
-            tags: selectedTagValues,
-            phone_number: document.getElementById("inputPhoneNumber").value,
-            address: addressToSubmit,
-            spotify_url: document.getElementById("inputSpotifyProfile").value,
-            youtube_url: document.getElementById("inputYoutubeProfile").value,
-            facebook_url: document.getElementById("inputFacebookProfile").value,
-            instagram_url: document.getElementById("inputInstagramProfile").value
-        };
-        axios.put(url, formInputData)
-            .then(response => {
-                alert("Account edited successfully.");
-            })
-            .catch(error => {
-                console.error("Error:", error.response ? error.response.data : error.message);
-                alert("Error: Unable to edit account, try again.");
-            });
+
+const handleSubmit = () => {
+    const selectedTagValues = selectedTags.map(tag => tag.value);
+    const url = `https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/user/${userId}`;
+    const currentUserAddress = filteredUser.length > 0 ? filteredUser[0].address : '';
+    const newAddress = document.getElementById("inputAddress2").value;
+    const addressToSubmit = newAddress.trim() === '' ? currentUserAddress : newAddress;
+    const formInputData = {
+        email_address: document.getElementById("inputEmail4").value,
+        username: document.getElementById("inputUsername").value,
+        profile_picture: document.getElementById("inputProfilePicture").value,
+        description: document.getElementById("inputDescription").value,
+        tags: selectedTagValues,
+        phone_number: document.getElementById("inputPhoneNumber").value,
+        address: addressToSubmit,
+        spotify_url: document.getElementById("inputSpotifyProfile").value,
+        youtube_url: document.getElementById("inputYoutubeProfile").value,
+        facebook_url: document.getElementById("inputFacebookProfile").value,
+        instagram_url: document.getElementById("inputInstagramProfile").value
     };
+    axios.put(url, formInputData)
+        .then(response => {
+            alert("Account edited successfully.");
+        })
+        .catch(error => {
+            console.error("Error:", error.response ? error.response.data : error.message);
+            alert("Error: Unable to edit account, try again.");
+        });
+};
+
+const logout = () => {
+
+    localStorage.clear()
+    navigate("/")
+    window.location.reload();
+}
+
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid">
@@ -115,7 +126,7 @@ const handleDelete = async (photoId) => {
                                 <li><Link to="" className="dropdown-item" data-bs-toggle="modal" data-bs-target="#galleryModal">Gallery</Link></li>
                                 <li><Link to="searchpage" className="dropdown-item">Start connecting</Link></li>
                                 <li><hr className="dropdown-divider"></hr></li>
-                                <li><Link to="loginpage" className="dropdown-item">Log out</Link></li>
+                                <li><Link to="loginpage" onClick={logout} className="dropdown-item">Log out</Link></li>
                             </ul>
                         </li>
                     </ul>
@@ -126,8 +137,10 @@ const handleDelete = async (photoId) => {
                         <div className="modal-dialog">
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <h1 className="modal-title fs-5" id="editModalLabel">Edit profile</h1>
-                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <h1 style={{ color: "white" }} className="modal-title fs-5" id="editModalLabel">Edit profile</h1>
+                                    <button style={{ color: "white" }} type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                    <i class="bi bi-x-lg"></i>
+                                    </button>
                                 </div>
                                 <div className="modal-body">
                                     <div className="row g-3">
@@ -204,8 +217,10 @@ const handleDelete = async (photoId) => {
                     <div className="modal-dialog modal-lg">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h1 className="modal-title fs-5" id="galleryModalLabel">Gallery</h1>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <h1 style={{ color: "white" }} className="modal-title fs-5" id="galleryModalLabel">Gallery</h1>
+                                <button style={{ color: "white" }} type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="bi bi-x-lg"></i>
+                                </button>
                             </div>
                             <div className="modal-body">
                                 <div className="mb-3">

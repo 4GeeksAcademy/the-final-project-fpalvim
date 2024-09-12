@@ -9,7 +9,9 @@ function ShowNavbar({children}) {
     
     useEffect(()=>{
         console.log(location);
-        if(location.pathname === '/loginpage') {
+        if (location.pathname == '/loginpage') {
+            setToShowNavbar(false)
+        } if (location.pathname == '/') {
             setToShowNavbar(false)
         } else {
             setToShowNavbar(true)

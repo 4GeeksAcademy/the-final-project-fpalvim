@@ -81,8 +81,9 @@ const Maps = () => {
               <div className='marker-popup-top d-flex margin-0 margin-auto align-items-center justify-content-between'>
                 <img src={marker.profile_picture} className="map-picture" alt="..."></img>
                 <Link to={`/profilepage/${marker.id}`}>
-                  <button className="visit-acc-button">{marker.username}</button>
+                  <button className="button-78">{marker.username}</button>
                 </Link>
+                
               </div>
               <hr class="hr" />
               <div>
@@ -91,7 +92,7 @@ const Maps = () => {
             </Popup>
           </Marker>
         ))}
-      </MapContainer>
+      </MapContainer>h
     </div>
   );
 };

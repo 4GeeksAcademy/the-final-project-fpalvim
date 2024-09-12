@@ -27,10 +27,7 @@ function ProfilePage() {
   useEffect(() => {
     axios.get('/reviews')
       .then(response => {
-        const userReviews = response.data.filter(review => review.reviewee_id === Number(id));
-        console.log(userReviews.data);
-        console.log(response.data);
-        
+        const userReviews = response.data.filter(review => review.reviewee_id == Number(id));
         
         setReviews(userReviews);
       })
@@ -70,7 +67,6 @@ function ProfilePage() {
             const reviewsResponse = await axios.get('https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/reviews');            
             const userReviews = reviewsResponse.data.filter(review => review.reviewee_id === Number(id));
             setReviews(userReviews);
-            console.log(reviewsResponse.data);
             
         } catch (error) {
             console.error('Error fetching profile data:', error);
@@ -215,7 +211,7 @@ const handleSubmitReview = () => {
               <h1>Our bio</h1>
                 <div className="input-group">
                   {users.map((user) =>
-                    user.id == id ? <h4 key={user.id}>{user.description}</h4> : null
+                    user.id == Number(id) ? <h4 key={user.id}>{user.description}</h4> : null
                   )}
                 </div>
               </div>
@@ -249,13 +245,13 @@ const handleSubmitReview = () => {
                 </div>
                 <div className="container-images-gallery-photos">
                   <div className="images-gallery-item">
-                    {currentImage && (
+                    {currentImage ? (
                       <img 
                         src={currentImage.filepath} 
                         className="d-block w-100" 
                         alt="..."
                       />
-                    )}
+                    ) : ( <p>Sorry, there are no images to show.</p> )}
                   </div>
                 </div>
               </div>
@@ -265,10 +261,10 @@ const handleSubmitReview = () => {
             <div className="social-media-icons d-flex justify-content-center align-content-center m-0 w-100">
               {users.map((user)=> user.id == id ? (
                 <div className="social-icons d-flex justify-content-between w-75 m-0" key={user.id}>
-                <Link target="_blank" to={user.spotify_url}><i id="spotify-icon" className="bi bi-spotify display-6 bg-white"></i></Link>
-                <Link target="_blank" to={user.youtube_url}><i id="youtube-icon" className="bi bi-youtube display-6"></i></Link>
-                <Link target="_blank" to={user.facebook_url}><i id="facebook-icon" className="bi bi-facebook display-6"></i></Link>
-                <Link target="_blank" to={user.instagram_url}><i id="instagram-icon" className="bi bi-instagram display-6"></i></Link>
+                  <Link target="_blank" to={user.spotify_url}><i id="spotify-icon" className="bi bi-spotify display-6 bg-white"></i></Link>
+                  <Link target="_blank" to={user.youtube_url}><i id="youtube-icon" className="bi bi-youtube display-6"></i></Link>
+                  <Link target="_blank" to={user.facebook_url}><i id="facebook-icon" className="bi bi-facebook display-6"></i></Link>
+                  <Link target="_blank" to={user.instagram_url}><i id="instagram-icon" className="bi bi-instagram display-6"></i></Link>
                 </div>
               ) : null)}
             </div>
@@ -280,7 +276,7 @@ const handleSubmitReview = () => {
           <h1 style={{ color: "white" }}>Where the connection happens</h1>
           <div className="topdiv-right d-flex justify-content-center align-itens-center">
             <div className="calendar-container">
-              {userData.id === Number(id) ? (
+              {inputReviewerId == Number(id) ? (
                 <div className="container-calendar-allowed d-flex">
                   <ShowCalendar
                                     selectedDates={availabilityDates}
@@ -353,7 +349,7 @@ const handleSubmitReview = () => {
                 ) : null)}
             </div>
            </div>
-          <div className="middiv-right">
+          <div className="middiv-right p-2 d-flex flex-column justify-content-center">
             <h1>reviews</h1>
             <div>
                 {showReviewForm ? (
@@ -379,7 +375,7 @@ const handleSubmitReview = () => {
                         </li>
                       ):null}
                     </ul>
-                    <button onClick={() => setShowReviewForm(true)}>
+                    <button className="button-78" onClick={() => setShowReviewForm(true)}>
                       Add a Review
                     </button>
                   </>
@@ -387,33 +383,7 @@ const handleSubmitReview = () => {
               </div>
             </div>
         
-            {/* <div>
-                        {currentReview ? (
-                            <div key={currentReview.id}>
-                                <p>Reviewer: <strong>{currentReview.reviewer_id}</strong></p>
-                                <p>{currentReview.comment}</p>
-                            </div>
-                        ) : null}
-                    </div>
-          </div>
-          <div className="middiv-right">
-            <h5>Write a review here</h5>
-            <div>
-            <textarea
-                value={newReview}
-                onChange={handleReviewChange}
-                placeholder="Write your review here..."
-                rows="4"
-                className="form-control"
-              />
-              <button
-                onClick={handleSubmitReview}
-                className="btn btn-primary mt-2"
-              >
-                Submit Review
-              </button>
-            </div>
-          </div> */}
+           
           <div className="botdiv-right">
           <h1>contact info</h1>
               {users.map((user) =>

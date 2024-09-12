@@ -7,7 +7,7 @@ import axios from "axios";
 function SearchPage() {
     const { comments, setComments, userTags, setUserTags, images, userData } = useContext(MyContext);
     const {users, searchQuery, setSearchQuery} = useContext(MyContext)
-    const loggedInProfile = userData.profile_type
+    const loggedInProfile = localStorage.getItem("profileType")
     const filteredUsers = users.filter((user) => user.profile_type !== loggedInProfile)
     const queryProfile = filteredUsers.filter((profile) => profile.username.toLowerCase().includes(searchQuery.toLowerCase()));
     const id = localStorage.getItem("userId")
@@ -16,15 +16,17 @@ function SearchPage() {
         const searchWord = e.target.value
         setSearchQuery(searchWord)
     }
-    const fetchUserTagsById = async () => {
-        const response = await axios.get(`https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/user/${id}/tags`)
-        // console.log(response.data);
-        setUserTags(response.data)
-        console.log(userTags, response.data)
-      }
-    useEffect(()=>{
+
+    useEffect(() => {
+        const fetchUserTagsById = async () => {
+          const response = await axios.get(`https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/user/${id}/tags`)
+          // console.log(response.data);
+          setUserTags(response.data)
+        }
+        fetchUserTagsById()
        
-    },[])
+    }, [id, users]);
+    
     return ( 
         <div className="search-page-container">
             <div className="search-bar p-3 d-flex align-items-center">
@@ -42,9 +44,17 @@ function SearchPage() {
                         <h5 className="band-title p-2">{filteredUser.username} </h5>
                         <div className="cardTop d-flex justify-content-center">
                         <div className="dropdown">
-  <button onClick={fetchUserTagsById} className="button-78 dropdown-toggle" role="button" type="button" data-bs-toggle="dropdown" aria-expanded="false">genres</button>
+  <button className="button-78 dropdown-toggle" role="button" type="button" data-bs-toggle="dropdown" aria-expanded="false">genres</button>
   <ul className="dropdown-menu">
-    
+  <div className="d-flex justify-content-center">
+                  {userTags.map((utag) => (
+                      <div className="profile-page-tags-badge p-2 m-2" key={utag.tag_id}>
+                          <div className="">
+                            <span>{utag} </span> 
+                          </div>
+                      </div>
+                  ))}
+                  </div>
  
   </ul>
 </div>
@@ -71,8 +81,7 @@ function SearchPage() {
             <br />
             <div className="nav justify-content-center">
                 <Link to={`/faqspage`} type="button" className="btn btn-link">FAQS</Link>
-                <button type="button" className="btn btn-link" onClick={() => navigate('/FaqsPage')}>about us</button>
-                <button type="button" className="btn btn-link" onClick={() => navigate('/FaqsPage')}>contact</button>
+                
             </div>
         </div>
      );

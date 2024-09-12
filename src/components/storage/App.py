@@ -140,11 +140,6 @@ def login():
     access_token = create_access_token(identity=user_db.username)
     return jsonify({"access_token": access_token, "user_db": user_db.serialize()}), 200
 
-@app.route("/protected", methods=["GET"])
-@jwt_required()
-def protected():
-    current_user = get_jwt_identity()
-    return jsonify(message= f'Hello, {current_user}, this is a protected route.')
 
 @app.route('/tag', methods=['POST'])
 def create_style_tag():
@@ -260,6 +255,14 @@ def users():
         'instagram_url': user.instagram_url
     } for user in user])
 
+@app.route('/user/<id>', methods=['GET'])
+def users_by_id(id):
+    user = User.query.filter_by(id=id).first()
+    
+    return jsonify({'username':user.username,
+                    'description':user.description
+    }),201
+
 @app.route('/dates/availability/<int:user_id>', methods=['GET'])
 def get_user_availability(user_id):
     try:
@@ -344,8 +347,8 @@ def band_update(id):
     }
     db.session.commit()
     return jsonify({"message":"User updated", "data":response_body}), 201
-@app.route('/dates/availability/<int:user_id>', methods=['PUT'])
 
+@app.route('/dates/availability/<int:user_id>', methods=['PUT'])
 def save_user_availability(user_id):
     try:
         data = request.json

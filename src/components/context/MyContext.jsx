@@ -50,14 +50,10 @@ export const MyProvider = ({ children }) => {
             // console.log(response.data);
             setTags(tagOptions)
         }
-        // const fetchComments = async () => {
-        //     const response = await axios.get(`https://jsonplaceholder.typicode.com/comments`)
-        //     // console.log(response.data);
-        //     setComments(response.data)
-        // }
+      
         fetchUsers()
         fetchTags()
-        // fetchComments()
+        
     },[])
     return (
         <MyContext.Provider value={{calDate, setCalDate,

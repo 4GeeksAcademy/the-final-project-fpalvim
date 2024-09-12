@@ -1,37 +1,22 @@
 import { useNavigate } from "react-router";
 import { useContext, useState } from "react";
 import { MyContext } from "../context/MyContext";
-import axios from "axios";
-import React, { useRef, } from "react";
+import React from "react";
 import MapSearchBar from "../common/MapSearchBar";
-
 
 
 function LoginPage() {
   
-
   const navigate = useNavigate();
   const {
-    users,
-    email,
-    setEmail,
     password,
     setPassword,
     username,
     setUsername,
-    address,
-    setAddress,
-    profilePicture,
-    setProfilePicture,
-    setPhoneNumber,
-    profileType,
     setProfileType,
-    setPosition,
-    userData,
     setUserData
   } = useContext(MyContext);
-  const [error, setError] = useState("")
-  const user = users.find(user => user.username === document.getElementById("userInputLogin").value);
+  
   const handleLogin = () => {
     const url = "https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/login"
     const username = document.getElementById("userInputLogin").value
@@ -62,9 +47,13 @@ function LoginPage() {
       console.error("Error making request:", error)
     })
   }
+
+
   const handleProfileTypeChange = (e) => {
     setProfileType(e.target.value);
   };
+
+  
   const handleSubmit = () => {
     const url = "https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/user"
     const email_address = document.getElementById("inputEmail4").value
@@ -90,9 +79,11 @@ function LoginPage() {
     })
     .then(response => response.json())
     .then(data => {
+      alert("Welcome to GigLink, your account is created!")
       console.log("Reponse from server:", data);
     })
     .catch((error) => {
+      alert("account created failed, try later or contact us!")
       console.error("Error making request:", error)
     })
   }
@@ -106,23 +97,16 @@ function LoginPage() {
   return (
   
     <div className="login-page-container">
+     
       <div className="center-content-container">
         <div className="content-container">
       <div className="header-login d-flex justify-content-between ">
-        <div>
-          <h1 className="logo">some room for logo</h1>
+        <div className=" d-flex">
+           <img className="logo" src="/src/components/common/logo.png" alt="" />
         </div>
         <div>
           <ul className="nav justify-content-end">
             <li className="nav-item">
-              <a
-                className="nav-link active"
-                style={{ color: "white" }}
-                aria-current="page"
-                href="/searchpage"
-              >
-                Explore
-              </a>
             </li>
           </ul>
         </div>
@@ -173,34 +157,15 @@ function LoginPage() {
               id="passwordInputLogin"
             ></input>
           </div>
-          <div className="mb-3 form-check">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              id="exampleCheck1"
-            ></input>
-            <label
-              className="form-check-label"
-              for="exampleCheck1"
-              style={{ color: "white" }}
-            >
-              Keep me logged in
-            </label>
-          </div>
+         
           <button
             type="button"
-            className="login-button"
+            className="button-78"
             onClick={handleLogin}
           >
             Log in
           </button>{" "}
-          <button
-            type="button"
-            className="btn btn-link"
-            style={{ color: "white" }}
-          >
-            Forgot my password
-          </button>
+          
           <a
                   href="#"
                   className="btn btn-link"
@@ -235,8 +200,8 @@ function LoginPage() {
                         <div className="modal-dialog">
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <h1 className="modal-title fs-5" id="exampleModalLabel">Ready for your musical adventure?</h1>
-                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <h1 style={{ color: "white" }} className="modal-title fs-5" id="exampleModalLabel">Ready for your musical adventure?</h1>
+                                    <button style={{ color: "white" }} type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
                                 </div>
                             <div className="modal-body">
                                 <div className="row g-3">
@@ -268,7 +233,7 @@ function LoginPage() {
                                         </select>
                                     </div>
                                     <div className="col-12">
-                                        <button  type="submit" className="btn btn-primary" onClick={handleSubmit}>Create account</button>
+                                        <button  type="submit" className="button-78" data-bs-dismiss="modal" onClick={handleSubmit}>Create account</button>
                                     </div>
                                 </div>
                             </div>
@@ -308,7 +273,7 @@ function LoginPage() {
             <br />
             <button
               type="button"
-              className="join-button"
+              className="button-78"
               data-bs-toggle="modal"
               data-bs-target="#exampleModal"
               style={{ color: "white" }}
@@ -357,21 +322,21 @@ function LoginPage() {
             <div className="carousel-inner">
               <div className="carousel-item active">
                 <img
-                  src=""
+                  src="https://images.pexels.com/photos/164693/pexels-photo-164693.jpeg"
                   className="d-block w-100"
                   alt=""
                 ></img>
               </div>
               <div className="carousel-item">
                 <img
-                  src=""
+                  src="https://images.pexels.com/photos/210887/pexels-photo-210887.jpeg?auto=compress&cs=tinysrgb&w=1200"
                   className="d-block w-100"
                   alt=""
                 ></img>
               </div>
               <div className="carousel-item">
                 <img
-                  src=""
+                  src="https://images.pexels.com/photos/1309240/pexels-photo-1309240.jpeg?auto=compress&cs=tinysrgb&w=1200"
                   className="d-block w-100"
                   alt=""
                 ></img>
@@ -420,20 +385,7 @@ function LoginPage() {
         >
           FAQS
         </button>
-        <button
-          type="button"
-          className="btn btn-link"
-          onClick={() => navigate("/FaqsPage")}
-        >
-          about us
-        </button>
-        <button
-          type="button"
-          className="btn btn-link"
-          onClick={() => navigate("/FaqsPage")}
-        >
-          contact
-        </button>
+        
       </div>
      
     </div>
