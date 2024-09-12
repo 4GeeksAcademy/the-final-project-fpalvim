@@ -19,9 +19,7 @@ import logging
 load_dotenv()
 logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__)
-# CORS(app, supports_credentials=True, resources={r"/*": {"origin": "*", "allow_headers": ["Authorization", "Content-Type"]}})
 cors = CORS(app)
-# CORS(app, resources={r"/api/*": {"origin": "https://super-duper-fortnight-7gvwxjxgjj7fr957-5173.app.github.dev"}})
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://avnadmin:AVNS_LLhpu0aHZ0pOlhg5G2r@final-project-felipe-d067.l.aivencloud.com:21737/defaultdb?sslmode=require'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET')
@@ -83,8 +81,7 @@ class User(db.Model):
             "spotify_url" : self.spotify_url,
             "youtube_url" : self.youtube_url,
             "facebook_url" : self.facebook_url,
-            "instagram_url" : self.instagram_url,
-            
+            "instagram_url" : self.instagram_url, 
         }
 
 class Tag(db.Model):
@@ -195,13 +192,11 @@ def post_review():
     data = request.get_json()
     reviewer_id = data.get('reviewer_id')
     reviewee_id = data.get('reviewee_id')
-    # comment_id = data.get('comment_id')
     comment = data.get('comment')
 
     new_review = Review(
         reviewer_id=reviewer_id,
         reviewee_id=reviewee_id,
-        # comment_id=comment_id,
         comment=comment
     )
     db.session.add(new_review)
@@ -299,7 +294,6 @@ def get_reviews():
 @app.route("/user/<id>", methods=["PUT"])
 def band_update(id):
     user = User.query.get(id)
-    # profile_type = request.json['profile_type']
     username =  request.json['username']
     description =  request.json['description']
     tags =  request.json['tags']
@@ -311,8 +305,6 @@ def band_update(id):
     youtube_url = request.json['youtube_url']
     facebook_url = request.json['facebook_url']
     instagram_url = request.json['instagram_url']
-    # comments = request.json['comments']
-    # user.profile_type = profile_type
     user.username = username
     user.description = description
     user.user_tags.clear()
@@ -329,9 +321,7 @@ def band_update(id):
     user.youtube_url = youtube_url
     user.facebook_url = facebook_url
     user.instagram_url = instagram_url
-    # user.comments = comments
     response_body = {
-        # "profile_type" : profile_type,
         "username" : username,
         "description" : description,
         "tags" : tags,
@@ -343,7 +333,6 @@ def band_update(id):
         "youtube_url" : youtube_url,
         "facebook_url" : facebook_url,
         "instagram_url" : instagram_url
-        # "comments" : comments
     }
     db.session.commit()
     return jsonify({"message":"User updated", "data":response_body}), 201
@@ -365,6 +354,7 @@ def save_user_availability(user_id):
         return jsonify({"message": "Availability dates updated successfully!"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 @app.route('/photos/<int:user_id>/<int:photo_id>', methods=['DELETE'])
 def delete_photo(user_id, photo_id):
     photo = Media.query.filter_by(user_id=user_id, id=photo_id).first()
@@ -377,4 +367,6 @@ def delete_photo(user_id, photo_id):
         db.session.rollback()
         return jsonify({"message": "Failed to delete the photo from the database", "error": str(e)}), 500
     return jsonify({"message": "Photo deleted successfully"}), 200
+
+    
 app.run(host='0.0.0.0', port=8787)

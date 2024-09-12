@@ -2,7 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { MyContext } from '../context/MyContext';
+
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 const Maps = () => {
   const [position, setPosition] = useState(null);
   const [markers, setMarkers] = useState([]);

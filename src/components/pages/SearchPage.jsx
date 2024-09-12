@@ -5,7 +5,7 @@ import Maps from "../common/Maps";
 import axios from "axios";
 
 function SearchPage() {
-    const { comments, setComments, userTags, setUserTags, images, userData } = useContext(MyContext);
+    const { userTags, setUserTags } = useContext(MyContext);
     const {users, searchQuery, setSearchQuery} = useContext(MyContext)
     const loggedInProfile = localStorage.getItem("profileType")
     const filteredUsers = users.filter((user) => user.profile_type !== loggedInProfile)
@@ -20,7 +20,6 @@ function SearchPage() {
     useEffect(() => {
         const fetchUserTagsById = async () => {
           const response = await axios.get(`https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/user/${id}/tags`)
-          // console.log(response.data);
           setUserTags(response.data)
         }
         fetchUserTagsById()

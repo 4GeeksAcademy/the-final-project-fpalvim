@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import ShowCalendarBlocked from "../common/ShowCalendarBlocked";
 
 function ProfilePage() {
-  const { users, reviews, setReviews, userTags, setUserTags, images, setImages, userData } = useContext(MyContext);
+  const { users, reviews, setReviews, userTags, setUserTags, images, setImages } = useContext(MyContext);
   const { id } = useParams()
   const [currentReview, setCurrentReview] = useState(null);
   const [availabilityDates, setAvailabilityDates] = useState([]);
@@ -50,12 +50,12 @@ function ProfilePage() {
   useEffect(() => {
     const fetchUserTagsById = async () => {
       const response = await axios.get(`https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/user/${id}/tags`)
-      // console.log(response.data);
+     
       setUserTags(response.data)
     }
     const fetchGallery = async () => {
           const response = await axios.get(`https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/user/${id}/photos`)
-          // console.log(response.data);
+          
           setImages(response.data)
     }
     const fetchProfileData = async () => {
@@ -151,13 +151,7 @@ const handleSubmitReview = () => {
     alert("Review added successfully!");
     setReviews(prevReviews => [...prevReviews, response.data]);
   })
-  // .then(response => {
-  //   setNewReview(''); 
-  //   alert("Review added successfully!");
-    
-    
-  //   setReviews(prevReviews => [...prevReviews, response.data]);
-  // })
+
   .catch(error => {
     console.error('Error posting the review:', error);
     alert("Error: Unable to add review, try again.");

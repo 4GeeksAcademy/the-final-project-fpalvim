@@ -3,6 +3,7 @@ import Calendar from 'react-calendar';
 import { format } from 'date-fns';
 import 'react-calendar/dist/Calendar.css';
 import './ShowCalendar.css';
+
 function ShowCalendar({ selectedDates, onConfirmDates }) {
     const [newSelectedDates, setNewSelectedDates] = useState([]);
     const [deselectedDates, setDeselectedDates] = useState([]);
@@ -14,14 +15,14 @@ function ShowCalendar({ selectedDates, onConfirmDates }) {
     const handleDateClick = (clickedDate) => {
         const dateString = format(clickedDate, "yyyy-MM-dd");
         if (formattedSelectedDates.includes(dateString)) {
-            // If the date is already available (green), toggle deselection
+        
             setDeselectedDates(prev =>
                 prev.includes(dateString)
                     ? prev.filter(d => d !== dateString)
                     : [...prev, dateString]
             );
         } else {
-            // If it's a new date (blue), toggle selection
+            
             setNewSelectedDates(prev =>
                 prev.includes(dateString)
                     ? prev.filter(d => d !== dateString)
@@ -31,8 +32,8 @@ function ShowCalendar({ selectedDates, onConfirmDates }) {
     };
     const handleSaveDates = () => {
         onConfirmDates(newSelectedDates, deselectedDates);
-        setNewSelectedDates([]); // Clear new selections
-        setDeselectedDates([]);  // Clear deselected dates
+        setNewSelectedDates([]);
+        setDeselectedDates([]); 
     };
     return (
         <div className="calendar-page-result d-flex flex-column justify-content-center align-itens-center">

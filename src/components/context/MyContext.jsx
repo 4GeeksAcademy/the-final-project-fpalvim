@@ -1,8 +1,10 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+
 export const MyContext = createContext(null)
+
 export const MyProvider = ({ children }) => {
+
     const [calDate, setCalDate] = useState()
     const [bands, setBands] = useState([])
     const [venues, setVenues] = useState([])
@@ -16,7 +18,6 @@ export const MyProvider = ({ children }) => {
     const [address, setAddress] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
     const [profilePicture, setProfilePicture] = useState("")
-    // const [profileType, setProfileType] = useState("")
     const [userTags, setUserTags] = useState([])
     const [reviews, setReviews] = useState([])
     const [searchQuery, setSearchQuery] = useState("")
@@ -26,7 +27,7 @@ export const MyProvider = ({ children }) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState({ title: '', message: '' });
     const [userData, setUserData] = useState(null)
-    // const [userId, setUserId] = useState("")
+    
     const openModal = (title, message) => {
         setModalContent({ title, message });
         setModalOpen(true);
@@ -38,7 +39,7 @@ export const MyProvider = ({ children }) => {
     useEffect(()=>{
         const fetchUsers = async () => {
             const response = await axios.get("https://organic-trout-4xj6rprx94w35jxp-8787.app.github.dev/users")
-            // console.log(response.data);
+
             setUsers(response.data)
             console.log(response.data);
         }
@@ -47,7 +48,7 @@ export const MyProvider = ({ children }) => {
             const tagOptions = response.data.map(tag => (
                 tag.style_tag
             ))
-            // console.log(response.data);
+            
             setTags(tagOptions)
         }
       
@@ -69,14 +70,12 @@ export const MyProvider = ({ children }) => {
                                     address, setAddress,
                                     phoneNumber, setPhoneNumber,
                                     profilePicture, setProfilePicture,
-                                    // profileType, setProfileType,
                                     userTags, setUserTags,
                                     reviews, setReviews,
                                     searchQuery, setSearchQuery,
                                     selectedTags, setSelectedTags,
                                     formattedTags, setFormattedTags,
                                     images, setImages,
-                                    // userId, setUserId
                                     userData, setUserData
                                     }}>
             {children}

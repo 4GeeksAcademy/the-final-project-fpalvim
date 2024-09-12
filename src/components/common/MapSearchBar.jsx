@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+
 const MapSearchBar = ({ onSelect }) => {
+
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const API_KEY = '7dc0f065e04d40339d145a08e98b49a9';
+    
     const handleSearch = async (e) => {
         e.preventDefault();
         if (query.length > 0) {

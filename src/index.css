@@ -1,11 +1,3 @@
-/* {
-    color: black;
-    background-color: #ffffff;
-}*/
-
-/* LOGIN PAGE STYLES */
-
-
 .login-page-container {
     background-image: url(https://cdn.pixabay.com/video/2022/06/21/121651-724710483_large.mp4);
     background-position: center;
@@ -26,7 +18,6 @@
     border: 2px solid #C419BE;
     border-radius: 30px;
     margin-top: 10px;
-    /* margin-bottom: 20px; */
     max-height: 100px;
 }
 
@@ -35,12 +26,7 @@
     margin-left: 50px;
     margin-top: 10px;
 }
-/*.top-view{
-    height: 900px;
-    background-image: url(https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto%3Dcompress%26cs%3Dtinysrgb%26w%3D1200);
-    background-position: center;
-    border-radius: 20px;
-}*/
+
 .login-form {
     width: 20%;
     margin-top: 200px;
@@ -55,7 +41,6 @@
 
 .join-button{
     border: 2px solid rgb(38, 40, 221);
-    /*border: 2px solid #C419BE;*/
     border-radius: 10px;
     background-color: rgb(38, 40, 221,0.7);
     box-shadow: 3px 3px 3px black;
@@ -70,7 +55,6 @@
     color: white;
 }
 .login-page-bottom{
-    /*background-color: rgb(196, 25, 190,0.4);*/
     border: 4px solid white;
     border-radius: 35px;
     max-width: fit-content;
@@ -115,57 +99,17 @@
     background-image: linear-gradient( rgb(38, 40, 221,0.5), rgb(196, 25, 190,0.5));
 }
 .left-account-button{
-    /*border: 2px solid lightgray;  
-    border-radius: 10px;
-    padding: 5px;
-    background-color:  rgb(196, 25, 190);*/
     border-color: #C419BE;
     border-radius: 10px;
     background-color:black;
     text-decoration: color(white);
 }
 .right-account-button{
-   /* border: 2px solid lightblue;
-    border-radius: 10px;
-    padding: 5px;
-    background-color: rgb(38, 40, 221);*/
     border-color: #C419BE;
     border-radius: 10px;
     background-color: black;
     text-decoration: color(white);
 }
-/*.overlay-form {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 30%;
-    opacity: .8;
-}
-
-.overlay-form label,
-.overlay-form button {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
-    background-color: #ebd1dd;
-    border-radius: 8px;
-}
-
-.overlay-form input {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
-    border-radius: 8px;
-}
-
-.overlay-form input {
-    padding-left: 1rem;
-}*/
 
 .login-page-bottom{
     display: flex;
@@ -350,49 +294,6 @@
     height: 100px;
 }
 
-/* .profile-page-img-container {
-    width: 100%;
-    height: auto;
-} 
-
-.profile-page-middle-images-container {
-    display: inline-block;
-    justify-content: space-between;
-    margin-right: 1rem;
-    background-color: rgb(221, 160, 221,0.2);
-    padding: 5px;
-    border-radius: 20px;
-    max-width: 1050px;
-}
-
-.profile-page-middle-images-container img {
-    width: 300px;
-    margin-left: 2rem;
-    border-radius: 5px;
-}
-
-.profile-page-bottom-left-box,
-.profile-page-bottom-center-box {
-    background-color: #FAFAF5;
-}
-
-.profile-page-bottom-left-box p,
-.profile-page-bottom-center-box p {
-    background-color: #FAFAF5;
-    height: 200px;
-}
-.soundtrack-icons{
-    background-color: rgb(221, 160, 221, 0.2);
-    max-width: 50px;
-    border-radius: 20px;
-    padding: 7px;
-}
-.profile-page-bottom-social-media-container{
-    background-color: rgb(221, 160, 221, 0.2);
-    border-radius: 20px;
-    padding: 7px;
-    max-width: 200px;
-}*/
 
 /* SEARCH PAGE STYLES */
 .search-page-container{
@@ -464,17 +365,7 @@
     border: 3px solid rgb(196, 25, 190,0.5);
     border-radius: 8px;
 }
-/*.oldPic{
-    background-color: white;
-    max-width: 240px;
-    max-height: 210px;
-    margin: 5px;
-}
-.galleryPics{
-    max-width: 250px;
-    max-height: 200px;
-    margin-bottom: 5px;
-}*/
+
 .existent-photos-gallery {
     width: 100%;
     height: auto;
@@ -551,18 +442,7 @@ body {
     border-radius: 5%;
     margin-right: 5px;
 }
-/*.top-searchbar{
-    border: 2px solid gray;
-    border-radius: 50px;
-    margin: 10px;
-    height: 50px;
-}
-.form-control{
-    border: none;
-    border-end-start-radius: 50px;
-    border-left: 2px solid gray;
-    
-}*/
+
 /* Faqs COMPONENT STYLES */
 .faqsDiv{
     background-image: url(https://cdn.pixabay.com/video/2022/06/21/121651-724710483_large.mp4);

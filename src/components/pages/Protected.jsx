@@ -1,4 +1,4 @@
-import { Navigate, useNavigate } from "react-router-dom"
+import { Navigate } from "react-router-dom"
 
 function Protected({children}) {
     const token = localStorage.getItem('token');
