@@ -6,13 +6,13 @@ import { MyContext } from '../context/MyContext';
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const Maps = () => {
-  const [position, setPosition] = useState(null);
-  const [markers, setMarkers] = useState([]);
-  const { users } = useContext(MyContext);
-  const loggedInUserId = localStorage.getItem("userId");
-  const apiKey = "7dc0f065e04d40339d145a08e98b49a9"
-  const getCoordinates = async (address) => {
-    const encodedAddress = encodeURIComponent(address);
+const [position, setPosition] = useState(null);
+const [markers, setMarkers] = useState([]);
+const { users } = useContext(MyContext);
+const loggedInUserId = localStorage.getItem("userId");
+const apiKey = "7dc0f065e04d40339d145a08e98b49a9"
+const getCoordinates = async (address) => {
+const encodedAddress = encodeURIComponent(address);
     try {
       const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${encodedAddress}&key=${apiKey}`);
       if (!response.ok) {
@@ -65,7 +65,7 @@ const Maps = () => {
   if (!position) {
     return (
       <div className="d-flex justify-content-center p-5 my-5">
-        <div className="spinner-border" style={{color:"pink"}} role="status"></div>
+        <div className="spinner-border mb-5" style={{color:"pink"}} role="status"></div>
       </div>
     );
   }

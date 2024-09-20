@@ -5,37 +5,38 @@ import 'react-calendar/dist/Calendar.css';
 import './ShowCalendar.css';
 
 function ShowCalendar({ selectedDates, onConfirmDates }) {
-    const [newSelectedDates, setNewSelectedDates] = useState([]);
-    const [deselectedDates, setDeselectedDates] = useState([]);
-    useEffect(() => {
-        setNewSelectedDates([]);
-        setDeselectedDates([]);
-    }, [selectedDates]);
-    const formattedSelectedDates = selectedDates.map(date => format(new Date(date), "yyyy-MM-dd"));
-    const handleDateClick = (clickedDate) => {
-        const dateString = format(clickedDate, "yyyy-MM-dd");
-        if (formattedSelectedDates.includes(dateString)) {
+const [newSelectedDates, setNewSelectedDates] = useState([]);
+const [deselectedDates, setDeselectedDates] = useState([]);
+useEffect(() => {
+    setNewSelectedDates([]);
+    setDeselectedDates([]);
+}, [selectedDates]);
+const formattedSelectedDates = selectedDates.map(date => format(new Date(date), "yyyy-MM-dd"));
+const handleDateClick = (clickedDate) => {
+    const dateString = format(clickedDate, "yyyy-MM-dd");
+    if (formattedSelectedDates.includes(dateString)) {
+    
+        setDeselectedDates(prev =>
+            prev.includes(dateString)
+                ? prev.filter(d => d !== dateString)
+                : [...prev, dateString]
+        );
+    } else {
         
-            setDeselectedDates(prev =>
-                prev.includes(dateString)
-                    ? prev.filter(d => d !== dateString)
-                    : [...prev, dateString]
-            );
-        } else {
-            
-            setNewSelectedDates(prev =>
-                prev.includes(dateString)
-                    ? prev.filter(d => d !== dateString)
-                    : [...prev, dateString]
-            );
-        }
-    };
-    const handleSaveDates = () => {
-        onConfirmDates(newSelectedDates, deselectedDates);
-        setNewSelectedDates([]);
-        setDeselectedDates([]); 
-    };
-    return (
+        setNewSelectedDates(prev =>
+            prev.includes(dateString)
+                ? prev.filter(d => d !== dateString)
+                : [...prev, dateString]
+        );
+    }
+};
+const handleSaveDates = () => {
+    onConfirmDates(newSelectedDates, deselectedDates);
+    setNewSelectedDates([]);
+    setDeselectedDates([]); 
+};
+
+return (
         <div className="calendar-page-result d-flex flex-column justify-content-center align-itens-center">
             <div className="calendar-container mb-2">
                 <Calendar

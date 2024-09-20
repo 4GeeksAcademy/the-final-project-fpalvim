@@ -24,8 +24,6 @@ export const MyProvider = ({ children }) => {
     const [selectedTags, setSelectedTags] = useState([])
     const [formattedTags, setFormattedTags] = useState([])
     const [images, setImages] = useState([])
-    const [modalOpen, setModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState({ title: '', message: '' });
     const [userData, setUserData] = useState(null)
     
     const openModal = (title, message) => {
